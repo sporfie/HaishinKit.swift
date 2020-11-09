@@ -174,7 +174,9 @@ open class RTMPConnection: EventDispatcher {
     open var parameters: Any?
     /// The object encoding for this RTMPConnection instance.
     open var objectEncoding: RTMPObjectEncoding = RTMPConnection.defaultObjectEncoding
-    /// The statistics of total incoming bytes.
+    /// The type of service that goes through that connection.
+	open var networkServiceType: StreamNetworkServiceTypeValue?
+	/// The statistics of total incoming bytes.
     open var totalBytesIn: Int64 {
         socket.totalBytesIn.value
     }
@@ -293,6 +295,7 @@ open class RTMPConnection: EventDispatcher {
         socket.delegate = self
         socket.setProperty(parameters, forKey: "parameters")
         socket.securityLevel = uri.scheme == "rtmps" || uri.scheme == "rtmpts"  ? .negotiatedSSL : .none
+		(socket as? RTMPSocket)?.networkServiceType = networkServiceType
         socket.connect(withName: uri.host!, port: uri.port ?? RTMPConnection.defaultPort)
     }
 

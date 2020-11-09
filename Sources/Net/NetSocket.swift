@@ -112,7 +112,9 @@ open class NetSocket: NSObject {
     open var qualityOfService: DispatchQoS = .userInitiated
     /// The instance determine to use the secure-socket layer (SSL) security level.
     open var securityLevel: StreamSocketSecurityLevel = .none
-    /// The statistics of total outgoing bytes.
+    /// The type of service that goes through that socket.
+	open var networkServiceType: StreamNetworkServiceTypeValue?
+	/// The statistics of total outgoing bytes.
     open private(set) var totalBytesOut: Atomic<Int64> = .init(0)
     /// The statistics of total outgoing queued bytes.
     open private(set) var queueBytesOut: Atomic<Int64> = .init(0)
@@ -121,6 +123,7 @@ open class NetSocket: NSObject {
         didSet {
             inputStream?.delegate = self
             inputStream?.setProperty(securityLevel.rawValue, forKey: .socketSecurityLevelKey)
+			inputStream?.setProperty(networkServiceType?.rawValue, forKey: .networkServiceType)
             if let inputStream = inputStream {
                 CFReadStreamSetDispatchQueue(inputStream, inputQueue)
             }
@@ -134,7 +137,8 @@ open class NetSocket: NSObject {
         didSet {
             outputStream?.delegate = self
             outputStream?.setProperty(securityLevel.rawValue, forKey: .socketSecurityLevelKey)
-            if let outputStream = outputStream {
+			outputStream?.setProperty(networkServiceType?.rawValue, forKey: .networkServiceType)
+			if let outputStream = outputStream {
                 CFWriteStreamSetDispatchQueue(outputStream, outputQueue)
             }
             if let oldValue = oldValue {
