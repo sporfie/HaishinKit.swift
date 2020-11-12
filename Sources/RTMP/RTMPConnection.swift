@@ -170,6 +170,8 @@ open class RTMPConnection: EventDispatcher {
     open private(set) var connected = false
     /// This instance requires Network.framework if possible.
     open var requireNetworkFramework = false
+    /// This instance uses an RTMPBlueSocket
+    open var useBlueSocket = true
     /// The socket optional parameters.
     open var parameters: Any?
     /// The object encoding for this RTMPConnection instance.
@@ -286,7 +288,9 @@ open class RTMPConnection: EventDispatcher {
         case "rtmpt", "rtmpts":
             socket = socket is RTMPTSocket ? socket : RTMPTSocket()
         default:
-            if #available(iOS 12.0, macOS 10.14, tvOS 12.0, *), requireNetworkFramework {
+			if useBlueSocket {
+				socket = socket is RTMPBlueSocket ? socket : RTMPBlueSocket()
+			} else if #available(iOS 12.0, macOS 10.14, tvOS 12.0, *), requireNetworkFramework {
                 socket = socket is RTMPNWSocket ? socket : RTMPNWSocket()
             } else {
                 socket = socket is RTMPSocket ? socket : RTMPSocket()

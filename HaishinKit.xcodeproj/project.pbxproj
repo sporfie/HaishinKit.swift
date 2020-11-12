@@ -389,6 +389,10 @@
 		BCFB355A24FA40DD00DC5108 /* PlaybackContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFB355924FA40DD00DC5108 /* PlaybackContainerViewController.swift */; };
 		BCFB355C24FAB29B00DC5108 /* HKPictureInPicureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFB355624FA37F700DC5108 /* HKPictureInPicureController.swift */; };
 		BCFB355E24FAB2D200DC5108 /* HKPictureInPicureControllerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFB355D24FAB2D200DC5108 /* HKPictureInPicureControllerImpl.swift */; };
+		E44F11F7255D7DB400D19882 /* Socket in Frameworks */ = {isa = PBXBuildFile; productRef = E44F11F6255D7DB400D19882 /* Socket */; };
+		E44F11F9255D7DE800D19882 /* RTMPBlueSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F11F8255D7DE800D19882 /* RTMPBlueSocket.swift */; };
+		E44F11FA255D7DE800D19882 /* RTMPBlueSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F11F8255D7DE800D19882 /* RTMPBlueSocket.swift */; };
+		E44F11FB255D7DE800D19882 /* RTMPBlueSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F11F8255D7DE800D19882 /* RTMPBlueSocket.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -683,6 +687,7 @@
 		BCFB355624FA37F700DC5108 /* HKPictureInPicureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKPictureInPicureController.swift; sourceTree = "<group>"; };
 		BCFB355924FA40DD00DC5108 /* PlaybackContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackContainerViewController.swift; sourceTree = "<group>"; };
 		BCFB355D24FAB2D200DC5108 /* HKPictureInPicureControllerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKPictureInPicureControllerImpl.swift; sourceTree = "<group>"; };
+		E44F11F8255D7DE800D19882 /* RTMPBlueSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPBlueSocket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -750,6 +755,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC7EDAB2250918E9005AC3BD /* Logboard in Frameworks */,
+				E44F11F7255D7DB400D19882 /* Socket in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1126,6 +1132,7 @@
 				29B876A51CD70B2800FC07DA /* RTMPMessage.swift */,
 				29B876A61CD70B2800FC07DA /* RTMPMuxer.swift */,
 				29DF20612312A3DD004057C3 /* RTMPNWSocket.swift */,
+				E44F11F8255D7DE800D19882 /* RTMPBlueSocket.swift */,
 				293B42E82340B4840086F973 /* RTMPObjectEncoding.swift */,
 				29B876A81CD70B2800FC07DA /* RTMPSharedObject.swift */,
 				29B876A91CD70B2800FC07DA /* RTMPSocket.swift */,
@@ -1266,6 +1273,7 @@
 			name = "HaishinKit iOS";
 			packageProductDependencies = (
 				BC7EDAB1250918E9005AC3BD /* Logboard */,
+				E44F11F6255D7DB400D19882 /* Socket */,
 			);
 			productName = lf;
 			productReference = 2945CBBD1B4BE66000104112 /* HaishinKit.framework */;
@@ -1409,7 +1417,6 @@
 				TargetAttributes = {
 					2915EC511D85BDF100621092 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = SUEQ2SZ2L5;
 						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
@@ -1428,7 +1435,6 @@
 					};
 					29C9327D1CD76FB800283FC5 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = SUEQ2SZ2L5;
 						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -1464,6 +1470,7 @@
 			mainGroup = 2945CBB31B4BE66000104112;
 			packageReferences = (
 				BC7EDAB0250918E9005AC3BD /* XCRemoteSwiftPackageReference "Logboard" */,
+				E44F11F5255D7DB400D19882 /* XCRemoteSwiftPackageReference "BlueSocket" */,
 			);
 			productRefGroup = 2945CBBE1B4BE66000104112 /* Products */;
 			projectDirPath = "";
@@ -1610,6 +1617,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				295891161EEB8DFC00CE51E1 /* FLVTagType.swift in Sources */,
+				E44F11F9255D7DE800D19882 /* RTMPBlueSocket.swift in Sources */,
 				29B876B11CD70B2800FC07DA /* RTMPMessage.swift in Sources */,
 				2941746B22D069B300A2944F /* AudioEffect.swift in Sources */,
 				295891011EEB7A8B00CE51E1 /* ScalingMode.swift in Sources */,
@@ -1754,6 +1762,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29B876EC1CD70D5900FC07DA /* AudioConverter.swift in Sources */,
+				E44F11FA255D7DE800D19882 /* RTMPBlueSocket.swift in Sources */,
 				29B876ED1CD70D5900FC07DA /* H264Decoder.swift in Sources */,
 				BC8E32E42532F3700087DF49 /* GLHKView.swift in Sources */,
 				29B876EE1CD70D5900FC07DA /* H264Encoder.swift in Sources */,
@@ -1981,6 +1990,7 @@
 				29EB3DF21ED05770001CAE8B /* DataConvertible.swift in Sources */,
 				29EB3E361ED05A35001CAE8B /* EventDispatcher.swift in Sources */,
 				29EB3E341ED05A30001CAE8B /* CRC32.swift in Sources */,
+				E44F11FB255D7DE800D19882 /* RTMPBlueSocket.swift in Sources */,
 				29FD1B5222FF13190095A0BE /* VTSessionPropertyKey.swift in Sources */,
 				29EB3E181ED05896001CAE8B /* NetService.swift in Sources */,
 				295891281EEB8EF300CE51E1 /* FLVAACPacket.swift in Sources */,
@@ -2072,7 +2082,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = SUEQ2SZ2L5;
+				DEVELOPMENT_TEAM = HSFZYX96VA;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/Examples/iOS/Screencast/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -2098,7 +2108,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = SUEQ2SZ2L5;
+				DEVELOPMENT_TEAM = HSFZYX96VA;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/Examples/iOS/Screencast/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -2411,7 +2421,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = SUEQ2SZ2L5;
+				DEVELOPMENT_TEAM = HSFZYX96VA;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2711,6 +2721,14 @@
 				minimumVersion = 2.2.1;
 			};
 		};
+		E44F11F5255D7DB400D19882 /* XCRemoteSwiftPackageReference "BlueSocket" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Kitura/BlueSocket.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.200;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2738,6 +2756,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BC7EDAB0250918E9005AC3BD /* XCRemoteSwiftPackageReference "Logboard" */;
 			productName = Logboard;
+		};
+		E44F11F6255D7DB400D19882 /* Socket */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E44F11F5255D7DB400D19882 /* XCRemoteSwiftPackageReference "BlueSocket" */;
+			productName = Socket;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
