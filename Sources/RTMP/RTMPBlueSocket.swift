@@ -113,10 +113,9 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 
     @discardableResult
     func doOutput(chunk: RTMPChunk, locked: UnsafeMutablePointer<UInt32>? = nil) -> Int {
-		let queuedAt = CACurrentMediaTime()
+		let queuedAt = Date()
         outputQueue.async {
-			let then = CACurrentMediaTime()
-			let queuedFor = (then-queuedAt)*1000
+			let queuedFor = Date().timeIntervalSince(queuedAt)*1000
 			guard queuedFor < self.writeTimeOut else {
 				self.bytesDiscarded.mutate { $0 += Int64(chunk.data.count) }
 				if logger.isEnabledFor(level: .trace) {
@@ -141,21 +140,15 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     func send(data: Data, locked: UnsafeMutablePointer<UInt32>? = nil) -> Int {
 		guard connected else { return 0 }
         queueBytesOut.mutate { $0 += Int64(data.count) }
+		var count = 0
 		do {
-			let then = CACurrentMediaTime()
-			let count = try self.connection?.write(from: data)
-			let elapsed = (CACurrentMediaTime()-then)*1000
-			if elapsed > self.writeTimeOut {
-				if logger.isEnabledFor(level: .trace) {
-					logger.warn("*********** sent \(count!) in \(Int(elapsed))ms")
-				}
-			}
+			count = try self.connection?.write(from: data) ?? 0
 		} catch {
 			print(error)
 		}
 		self.totalBytesOut.mutate { $0 += Int64(data.count) }
 		self.queueBytesOut.mutate { $0 -= Int64(data.count) }
-		self.bytesOut.mutate { $0 += Int64(data.count) }
+		self.bytesOut.mutate { $0 += Int64(count) }
         return data.count
     }
 
