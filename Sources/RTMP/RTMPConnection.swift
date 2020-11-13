@@ -121,7 +121,7 @@ open class RTMPConnection: EventDispatcher {
     enum VideoFunction: UInt8 {
         case clientSeek = 1
     }
-
+	
     private static func createSanJoseAuthCommand(_ url: URL, description: String) -> String {
         var command: String = url.absoluteString
 
@@ -197,6 +197,11 @@ open class RTMPConnection: EventDispatcher {
     /// The statistics of outgoing bytes per second.
     @objc open private(set) dynamic var currentBytesOutPerSecond: Int32 = 0
 
+	// The Blue Socket stats (if we're using a Blue Socket)
+	open var socketStatistics : RTMPBlueSocket.Statistics? {
+		return (socket as? RTMPBlueSocket)?.statistics
+	}
+	
     var socket: RTMPSocketCompatible!
     var streams: [UInt32: RTMPStream] = [:]
     var sequence: Int64 = 0
@@ -431,32 +436,44 @@ open class RTMPConnection: EventDispatcher {
 
     @objc
     private func on(timer: Timer) {
-        let totalBytesIn: Int64 = self.totalBytesIn
-        let totalBytesOut: Int64 = self.totalBytesOut
-        currentBytesInPerSecond = Int32(totalBytesIn - previousTotalBytesIn)
-        currentBytesOutPerSecond = Int32(totalBytesOut - previousTotalBytesOut)
-        previousTotalBytesIn = totalBytesIn
-        previousTotalBytesOut = totalBytesOut
-        previousQueueBytesOut.append(socket.queueBytesOut.value)
-        for (_, stream) in streams {
-            stream.on(timer: timer)
-        }
-        if measureInterval <= previousQueueBytesOut.count {
-            var total: Int = 0
-            for i in 0..<previousQueueBytesOut.count - 1 where previousQueueBytesOut[i] < previousQueueBytesOut[i + 1] {
-                total += 1
-            }
-            if total == measureInterval - 1 {
-                for (_, stream) in streams {
-                    stream.delegate?.rtmpStream(stream, didPublishInsufficientBW: self)
-                }
-            } else if total == 0 {
-                for (_, stream) in streams {
-                    stream.delegate?.rtmpStream(stream, didPublishSufficientBW: self)
-                }
-            }
-            previousQueueBytesOut.removeFirst()
-        }
+		if let socket = socket as? RTMPBlueSocket {
+			if socket.statistics.discarded.total > 0 {
+				for (_, stream) in streams {
+					stream.delegate?.rtmpStream(stream, didPublishInsufficientBW: self)
+				}
+			} else {
+				for (_, stream) in streams {
+					stream.delegate?.rtmpStream(stream, didPublishSufficientBW: self)
+				}
+			}
+		} else {
+			let totalBytesIn: Int64 = self.totalBytesIn
+			let totalBytesOut: Int64 = self.totalBytesOut
+			currentBytesInPerSecond = Int32(totalBytesIn - previousTotalBytesIn)
+			currentBytesOutPerSecond = Int32(totalBytesOut - previousTotalBytesOut)
+			previousTotalBytesIn = totalBytesIn
+			previousTotalBytesOut = totalBytesOut
+			previousQueueBytesOut.append(socket.queueBytesOut.value)
+			for (_, stream) in streams {
+				stream.on(timer: timer)
+			}
+			if measureInterval <= previousQueueBytesOut.count {
+				var total: Int = 0
+				for i in 0..<previousQueueBytesOut.count - 1 where previousQueueBytesOut[i] < previousQueueBytesOut[i + 1] {
+					total += 1
+				}
+				if total == measureInterval - 1 {
+					for (_, stream) in streams {
+						stream.delegate?.rtmpStream(stream, didPublishInsufficientBW: self)
+					}
+				} else if total == 0 {
+					for (_, stream) in streams {
+						stream.delegate?.rtmpStream(stream, didPublishSufficientBW: self)
+					}
+				}
+				previousQueueBytesOut.removeFirst()
+			}
+		}
         for (_, stream) in streams {
             stream.delegate?.rtmpStream(stream, didStatics: self)
         }

@@ -3,13 +3,21 @@
 //  HaishinKit
 //
 //  Created by Guy on 12.11.20.
-//  Copyright © 2020 Shogo Endo. All rights reserved.
+//  Copyright © 2020 Sporfie. All rights reserved.
 //
 
 import Socket
 
-open class RTMPBlueSocket: RTMPSocketCompatible {
+open class RTMPBlueSocket: RTMPSocketCompatible {	
+	public class Statistics {
+		public var received = CoumpoundValue<Int64>()
+		public var sent = CoumpoundValue<Int64>()
+		public var discarded = CoumpoundValue<Int64>()
+	}
+
 	open var writeTimeOut = 500.0
+	open var statisticsWindow = 5	// Seconds
+	open var statistics = Statistics()
 
 	var timestamp: TimeInterval = 0.0
     var chunkSizeC: Int = RTMPChunk.defaultSize
@@ -26,10 +34,14 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     var inputBuffer = Data()
     weak var delegate: RTMPSocketDelegate?
 
+    var bytesIn: Atomic<Int64> = .init(0)
+    var bytesOut: Atomic<Int64> = .init(0)
+    var bytesDiscarded: Atomic<Int64> = .init(0)
+	var timer : Timer?
+
     var queueBytesOut: Atomic<Int64> = .init(0)
     var totalBytesIn: Atomic<Int64> = .init(0)
     var totalBytesOut: Atomic<Int64> = .init(0)
-    var totalBytesDiscarded: Atomic<Int64> = .init(0)
     var connected = false {
         didSet {
             if connected {
@@ -67,7 +79,9 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
         totalBytesIn.mutate { $0 = 0 }
         totalBytesOut.mutate { $0 = 0 }
         queueBytesOut.mutate { $0 = 0 }
-        totalBytesDiscarded.mutate { $0 = 0 }
+        bytesIn.mutate { $0 = 0 }
+        bytesOut.mutate { $0 = 0 }
+		bytesDiscarded.mutate { $0 = 0 }
         inputBuffer.removeAll(keepingCapacity: false)
 		connection = try? Socket.create()
 		guard connection != nil else { return }
@@ -80,10 +94,13 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 				self.close(isDisconnected: true)
 			}
 		}
+		timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateStats(timer:)), userInfo: nil, repeats: true)
     }
 
     func close(isDisconnected: Bool) {
         guard connection != nil else { return }
+		timer?.invalidate()
+		timer = nil
         if isDisconnected {
             let data: ASObject = (readyState == .handshakeDone) ?
                 RTMPConnection.Code.connectClosed.data("") : RTMPConnection.Code.connectFailed.data("")
@@ -100,8 +117,10 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 			let then = CACurrentMediaTime()
 			let queuedFor = (then-queuedAt)*1000
 			guard queuedFor < self.writeTimeOut else {
-				self.totalBytesDiscarded.mutate { $0 += Int64(chunk.data.count) }
-				print("discarded \(chunk.data.count) after \(Int(queuedFor))")
+				self.bytesDiscarded.mutate { $0 += Int64(chunk.data.count) }
+				if logger.isEnabledFor(level: .trace) {
+					logger.warn("discarded \(chunk.data.count) after \(Int(queuedFor))")
+				}
 				return
 			}
 			
@@ -126,13 +145,16 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 			let count = try self.connection?.write(from: data)
 			let elapsed = (CACurrentMediaTime()-then)*1000
 			if elapsed > self.writeTimeOut {
-				print("*********** sent \(count!) \(Int(elapsed))")
+				if logger.isEnabledFor(level: .trace) {
+					logger.warn("*********** sent \(count!) in \(Int(elapsed))ms")
+				}
 			}
 		} catch {
 			print(error)
 		}
 		self.totalBytesOut.mutate { $0 += Int64(data.count) }
 		self.queueBytesOut.mutate { $0 -= Int64(data.count) }
+		self.bytesOut.mutate { $0 += Int64(data.count) }
         return data.count
     }
 
@@ -145,6 +167,7 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 		guard count > 0 else { return }
 		self.inputBuffer.append(data)
 		self.totalBytesIn.mutate { $0 += Int64(data.count) }
+		self.bytesIn.mutate { $0 += Int64(data.count) }
 		self.listen()
 		self.receive()
     }
@@ -181,4 +204,13 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
             break
         }
     }
+	
+	@objc func updateStats(timer: Timer) {
+		let totalIn = bytesIn.mutate { $0 = 0 }
+		let totalOut = bytesOut.mutate { $0 = 0 }
+		let totalDiscarded = bytesDiscarded.mutate { $0 = 0 }
+		statistics.received.add(totalIn, trim: statisticsWindow)
+		statistics.sent.add(totalOut, trim: statisticsWindow)
+		statistics.discarded.add(totalDiscarded, trim: statisticsWindow)
+	}
 }

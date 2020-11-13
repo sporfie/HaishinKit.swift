@@ -16,9 +16,13 @@ public struct Atomic<A> {
     }
 
     /// Setter for the value.
-    public mutating func mutate(_ transform: (inout A) -> Void) {
-        queue.sync(flags: .barrier) {
+	/// Returns the previous value
+	@discardableResult
+    public mutating func mutate(_ transform: (inout A) -> Void) -> A {
+        return queue.sync(flags: .barrier) {
+			let old = self._value
             transform(&self._value)
+			return old
         }
     }
 }

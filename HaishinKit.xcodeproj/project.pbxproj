@@ -393,6 +393,9 @@
 		E44F11F9255D7DE800D19882 /* RTMPBlueSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F11F8255D7DE800D19882 /* RTMPBlueSocket.swift */; };
 		E44F11FA255D7DE800D19882 /* RTMPBlueSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F11F8255D7DE800D19882 /* RTMPBlueSocket.swift */; };
 		E44F11FB255D7DE800D19882 /* RTMPBlueSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F11F8255D7DE800D19882 /* RTMPBlueSocket.swift */; };
+		E44F1201255E972400D19882 /* CoumpoundValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F1200255E972400D19882 /* CoumpoundValue.swift */; };
+		E44F1202255E972400D19882 /* CoumpoundValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F1200255E972400D19882 /* CoumpoundValue.swift */; };
+		E44F1203255E972400D19882 /* CoumpoundValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F1200255E972400D19882 /* CoumpoundValue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -688,6 +691,7 @@
 		BCFB355924FA40DD00DC5108 /* PlaybackContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackContainerViewController.swift; sourceTree = "<group>"; };
 		BCFB355D24FAB2D200DC5108 /* HKPictureInPicureControllerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKPictureInPicureControllerImpl.swift; sourceTree = "<group>"; };
 		E44F11F8255D7DE800D19882 /* RTMPBlueSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPBlueSocket.swift; sourceTree = "<group>"; };
+		E44F1200255E972400D19882 /* CoumpoundValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoumpoundValue.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -786,6 +790,7 @@
 		290907CE1C3961BC00F2E80C /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				E44F1200255E972400D19882 /* CoumpoundValue.swift */,
 				298BCF321DD4C44A007FF86A /* AnyUtil.swift */,
 				29DC17B221D0CC0600E26CED /* Atomic.swift */,
 				29B876B81CD70B3900FC07DA /* ByteArray.swift */,
@@ -1620,6 +1625,7 @@
 				E44F11F9255D7DE800D19882 /* RTMPBlueSocket.swift in Sources */,
 				29B876B11CD70B2800FC07DA /* RTMPMessage.swift in Sources */,
 				2941746B22D069B300A2944F /* AudioEffect.swift in Sources */,
+				E44F1201255E972400D19882 /* CoumpoundValue.swift in Sources */,
 				295891011EEB7A8B00CE51E1 /* ScalingMode.swift in Sources */,
 				BC83A4732403D83B006BDE06 /* VTCompressionSession+Extension.swift in Sources */,
 				2943ED53232FCA7C00ED6301 /* Setting.swift in Sources */,
@@ -1765,6 +1771,7 @@
 				E44F11FA255D7DE800D19882 /* RTMPBlueSocket.swift in Sources */,
 				29B876ED1CD70D5900FC07DA /* H264Decoder.swift in Sources */,
 				BC8E32E42532F3700087DF49 /* GLHKView.swift in Sources */,
+				E44F1202255E972400D19882 /* CoumpoundValue.swift in Sources */,
 				29B876EE1CD70D5900FC07DA /* H264Encoder.swift in Sources */,
 				29EA87EB1E79A3B70043A5F8 /* CMBlockBuffer+Extension.swift in Sources */,
 				29B876F01CD70D5900FC07DA /* Constants.swift in Sources */,
@@ -1994,6 +2001,7 @@
 				29FD1B5222FF13190095A0BE /* VTSessionPropertyKey.swift in Sources */,
 				29EB3E181ED05896001CAE8B /* NetService.swift in Sources */,
 				295891281EEB8EF300CE51E1 /* FLVAACPacket.swift in Sources */,
+				E44F1203255E972400D19882 /* CoumpoundValue.swift in Sources */,
 				29EB3E051ED05862001CAE8B /* MP4Reader.swift in Sources */,
 				2958911C1EEB8E3F00CE51E1 /* FLVAudioCodec.swift in Sources */,
 				29EB3DF61ED0577C001CAE8B /* CMSampleBuffer+Extension.swift in Sources */,

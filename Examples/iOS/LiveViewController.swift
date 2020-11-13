@@ -23,7 +23,7 @@ final class ExampleRecorderDelegate: DefaultAVRecorderDelegate {
     }
 }
 
-final class LiveViewController: UIViewController {
+final class LiveViewController: UIViewController, RTMPStreamDelegate {
     private static let maxRetryCount: Int = 5
 
     @IBOutlet private weak var lfView: MTHKView!
@@ -64,6 +64,7 @@ final class LiveViewController: UIViewController {
             .height: 1280
         ]
         rtmpStream.mixer.recorder.delegate = ExampleRecorderDelegate.shared
+		rtmpStream.delegate = self
 
         videoBitrateSlider?.value = Float(RTMPStream.defaultVideoBitrate) / 1000
         audioBitrateSlider?.value = Float(RTMPStream.defaultAudioBitrate) / 1000
@@ -238,4 +239,33 @@ final class LiveViewController: UIViewController {
             currentFPSLabel?.text = "\(rtmpStream.currentFPS)"
         }
     }
+	
+	func rtmpStream(_ stream: RTMPStream, didPublishInsufficientBW connection: RTMPConnection) {
+		if let stats = connection.socketStatistics {
+			let sent = Double(stats.sent.total)
+			let discarded = Double(stats.discarded.total)
+			let prct = 100*discarded/(discarded+sent)
+			print("Insufficient bandwidth, packet loss \(prct)%")
+		}
+	}
+	
+	func rtmpStream(_ stream: RTMPStream, didPublishSufficientBW connection: RTMPConnection) {
+//		NSLog("didPublishSufficientBW")
+	}
+	
+	func rtmpStream(_ stream: RTMPStream, didOutput audio: AVAudioBuffer, presentationTimeStamp: CMTime) {
+		//		NSLog("didOutput audio")
+	}
+	
+	func rtmpStream(_ stream: RTMPStream, didOutput video: CMSampleBuffer) {
+		//		NSLog("didOutput video")
+	}
+	
+	func rtmpStream(_ stream: RTMPStream, didStatics connection: RTMPConnection) {
+		//		NSLog("didStatics")
+	}
+	
+	func rtmpStreamDidClear(_ stream: RTMPStream) {
+		//		NSLog("didClear")
+	}
 }
