@@ -6,6 +6,7 @@
 //  Copyright © 2020 Sporfie. All rights reserved.
 //
 
+import Foundation
 import Socket
 
 open class RTMPBlueSocket: RTMPSocketCompatible {	
