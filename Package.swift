@@ -14,6 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/shogo4405/Logboard.git", from: "2.2.1")
+		.package(url: "https://github.com/Kitura/BlueSocket.git", from: "1.0.200")
     ],
     targets: [
         .target(name: "SwiftPMSupport"),
