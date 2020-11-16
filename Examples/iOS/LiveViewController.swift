@@ -245,8 +245,8 @@ final class LiveViewController: UIViewController, RTMPStreamDelegate {
 			let sent = Double(stats.sent.total)
 			let discarded = Double(stats.discarded.total)
 			let prct = 100*discarded/(discarded+sent)
-			let queued = Int(Double(stats.queued.total)/Double(stats.queued.values.count))
-			print("Insufficient bandwidth, packet loss \(prct)%, queued \(queued)")
+			let queued = stats.queued.total-stats.sent.total
+			print("Insufficient bandwidth, packet loss \(prct)%, in queue \(queued)")
 		}
 	}
 	

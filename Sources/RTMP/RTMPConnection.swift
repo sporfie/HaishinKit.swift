@@ -37,7 +37,7 @@ open class RTMPConnection: EventDispatcher {
     public static let defaultChunkSizeS: Int = 1024 * 8
     public static let defaultCapabilities: Int = 239
     public static let defaultObjectEncoding: RTMPObjectEncoding = .amf0
-    public static let maxQueued: Int = 10
+    public static let maxQueued: Int = 100000
 
     /**
      NetStatusEvent#info.code for NetConnection
@@ -437,8 +437,8 @@ open class RTMPConnection: EventDispatcher {
 
     @objc
     private func on(timer: Timer) {
-		if let socket = socket as? RTMPBlueSocket, !socket.statistics.queued.values.isEmpty {
-			let queued = Int(Double(socket.statistics.queued.total)/Double(socket.statistics.queued.values.count))
+		if let stats = (socket as? RTMPBlueSocket)?.statistics, !stats.queued.values.isEmpty {
+			let queued = stats.queued.total-stats.sent.total
 			if queued > RTMPConnection.maxQueued {
 				for (_, stream) in streams {
 					stream.delegate?.rtmpStream(stream, didPublishInsufficientBW: self)

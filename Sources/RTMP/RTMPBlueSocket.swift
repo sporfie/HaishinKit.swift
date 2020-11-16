@@ -37,6 +37,7 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     weak var delegate: RTMPSocketDelegate?
 
     var bytesIn: Atomic<Int64> = .init(0)
+    var bytesQueued: Atomic<Int64> = .init(0)
     var bytesOut: Atomic<Int64> = .init(0)
     var bytesDiscarded: Atomic<Int64> = .init(0)
 	var timer : Timer?
@@ -44,7 +45,6 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     var queueBytesOut: Atomic<Int64> = .init(0)
     var totalBytesIn: Atomic<Int64> = .init(0)
     var totalBytesOut: Atomic<Int64> = .init(0)
-    var queued: Atomic<Int64> = .init(0)
 	var connected = false {
         didSet {
             if connected {
@@ -83,6 +83,7 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
         totalBytesOut.mutate { $0 = 0 }
         queueBytesOut.mutate { $0 = 0 }
         bytesIn.mutate { $0 = 0 }
+        bytesQueued.mutate { $0 = 0 }
         bytesOut.mutate { $0 = 0 }
 		bytesDiscarded.mutate { $0 = 0 }
         inputBuffer.removeAll(keepingCapacity: false)
@@ -116,8 +117,9 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     @discardableResult
     func doOutput(chunk: RTMPChunk, locked: UnsafeMutablePointer<UInt32>? = nil) -> Int {
 		let queuedAt = Date()
-		queued.mutate { $0 += 1 }
-        outputQueue.async {
+		queueBytesOut.mutate { $0 += Int64(chunk.data.count) }
+		bytesQueued.mutate { $0 += Int64(chunk.data.count) }
+		outputQueue.async {
 			let queuedFor = Date().timeIntervalSince(queuedAt)*1000
 			guard queuedFor < self.writeTimeOut else {
 				self.bytesDiscarded.mutate { $0 += Int64(chunk.data.count) }
@@ -132,8 +134,7 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 				self.send(data: chunks[i])
 			}
 			self.send(data: chunks.last!, locked: locked)
-			
-			self.queued.mutate { $0 -= 1 }
+			self.queueBytesOut.mutate { $0 -= Int64(chunk.data.count) }
 		}
         if logger.isEnabledFor(level: .trace) {
             logger.trace(chunk)
@@ -144,7 +145,6 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     @discardableResult
     func send(data: Data, locked: UnsafeMutablePointer<UInt32>? = nil) -> Int {
 		guard connected else { return 0 }
-        queueBytesOut.mutate { $0 += Int64(data.count) }
 		var count = 0
 		do {
 			count = try self.connection?.write(from: data) ?? 0
@@ -152,7 +152,6 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 			print(error)
 		}
 		self.totalBytesOut.mutate { $0 += Int64(data.count) }
-		self.queueBytesOut.mutate { $0 -= Int64(data.count) }
 		self.bytesOut.mutate { $0 += Int64(count) }
         return data.count
     }
@@ -206,11 +205,12 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 	
 	@objc func updateStats(timer: Timer) {
 		let totalIn = bytesIn.mutate { $0 = 0 }
+		let totalQueued = bytesQueued.mutate { $0 = 0 }
 		let totalOut = bytesOut.mutate { $0 = 0 }
 		let totalDiscarded = bytesDiscarded.mutate { $0 = 0 }
 		statistics.received.add(totalIn, trim: statisticsWindow)
+		statistics.queued.add(totalQueued, trim: statisticsWindow)
 		statistics.sent.add(totalOut, trim: statisticsWindow)
 		statistics.discarded.add(totalDiscarded, trim: statisticsWindow)
-		statistics.queued.add(queued.value, trim: statisticsWindow)
 	}
 }
