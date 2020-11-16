@@ -43,7 +43,9 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     var queueBytesOut: Atomic<Int64> = .init(0)
     var totalBytesIn: Atomic<Int64> = .init(0)
     var totalBytesOut: Atomic<Int64> = .init(0)
-    var connected = false {
+    var audioQueue: Atomic<Int64> = .init(0)
+    var videoQueue: Atomic<Int64> = .init(0)
+	var connected = false {
         didSet {
             if connected {
 				outputQueue.async {
@@ -69,8 +71,8 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
             }
         }
     }
-    lazy var inputQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.NWSocket.input", qos: qualityOfService)
-    lazy var outputQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.NWSocket.output", qos: qualityOfService)
+    lazy var inputQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.BlueSocket.input", qos: qualityOfService)
+    lazy var outputQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.BlueSocket.output", qos: qualityOfService)
 
     func connect(withName: String, port: Int) {
         handshake.clear()
@@ -114,6 +116,14 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     @discardableResult
     func doOutput(chunk: RTMPChunk, locked: UnsafeMutablePointer<UInt32>? = nil) -> Int {
 		let queuedAt = Date()
+		if chunk.streamId == FLVTagType.audio.streamId {
+			audioQueue.mutate { $0 += 1 }
+		} else if chunk.streamId == FLVTagType.video.streamId {
+			videoQueue.mutate { $0 += 1 }
+		}
+		if logger.isEnabledFor(level: .trace) {
+			print("Queued: A \(audioQueue.value) V \(videoQueue.value)")
+		}
         outputQueue.async {
 			let queuedFor = Date().timeIntervalSince(queuedAt)*1000
 			guard queuedFor < self.writeTimeOut else {
@@ -129,6 +139,12 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 				self.send(data: chunks[i])
 			}
 			self.send(data: chunks.last!, locked: locked)
+			
+			if chunk.streamId == FLVTagType.audio.streamId {
+				self.audioQueue.mutate { $0 -= 1 }
+			} else if chunk.streamId == FLVTagType.video.streamId {
+				self.videoQueue.mutate { $0 -= 1 }
+			}
 		}
         if logger.isEnabledFor(level: .trace) {
             logger.trace(chunk)
