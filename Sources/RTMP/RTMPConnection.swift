@@ -37,7 +37,6 @@ open class RTMPConnection: EventDispatcher {
     public static let defaultChunkSizeS: Int = 1024 * 8
     public static let defaultCapabilities: Int = 239
     public static let defaultObjectEncoding: RTMPObjectEncoding = .amf0
-    public static let maxQueued: Int = 100000
 
     /**
      NetStatusEvent#info.code for NetConnection
@@ -173,6 +172,9 @@ open class RTMPConnection: EventDispatcher {
     open var requireNetworkFramework = false
     /// This instance uses an RTMPBlueSocket
     open var useBlueSocket = true
+	/// Max amount of bytes waiting to be sent to trigger an 'insufficient bandwidht report'
+	/// Only works with BlueSocket
+	open var maxQueuedBytesCount = 100000
     /// The socket optional parameters.
     open var parameters: Any?
     /// The object encoding for this RTMPConnection instance.
@@ -439,7 +441,7 @@ open class RTMPConnection: EventDispatcher {
     private func on(timer: Timer) {
 		if let stats = (socket as? RTMPBlueSocket)?.statistics, !stats.queued.values.isEmpty {
 			let queued = stats.queued.total-stats.sent.total
-			if queued > RTMPConnection.maxQueued {
+			if queued > maxQueuedBytesCount {
 				for (_, stream) in streams {
 					stream.delegate?.rtmpStream(stream, didPublishInsufficientBW: self)
 				}
