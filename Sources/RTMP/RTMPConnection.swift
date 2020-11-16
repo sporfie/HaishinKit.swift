@@ -174,7 +174,7 @@ open class RTMPConnection: EventDispatcher {
     open var useBlueSocket = true
 	/// Max amount of bytes waiting to be sent to trigger an 'insufficient bandwidht report'
 	/// Only works with BlueSocket
-	open var maxQueuedBytesCount = 100000
+	open var maxQueuedBytesCount = 30000
     /// The socket optional parameters.
     open var parameters: Any?
     /// The object encoding for this RTMPConnection instance.

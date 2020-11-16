@@ -153,6 +153,9 @@ public final class H264Encoder {
     }
     weak var delegate: VideoEncoderDelegate?
 
+	var queued = 0
+	var encoded = 0
+	
     private(set) var status: OSStatus = noErr
     private var attributes: [NSString: AnyObject] {
         var attributes: [NSString: AnyObject] = H264Encoder.defaultAttributes
@@ -201,6 +204,8 @@ public final class H264Encoder {
             return
         }
         let encoder: H264Encoder = Unmanaged<H264Encoder>.fromOpaque(refcon).takeUnretainedValue()
+		encoder.encoded += 1
+		print("queued (\(encoder.queued)) - encoded (\(encoder.encoded)) = \(encoder.queued-encoder.encoded)")
         encoder.formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer)
         encoder.delegate?.sampleOutput(video: sampleBuffer)
     }
@@ -255,6 +260,7 @@ public final class H264Encoder {
             return
         }
         var flags: VTEncodeInfoFlags = []
+		queued += 1
         VTCompressionSessionEncodeFrame(
             session,
             imageBuffer: muted ? lastImageBuffer ?? imageBuffer : imageBuffer,
