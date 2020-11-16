@@ -117,7 +117,6 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     @discardableResult
     func doOutput(chunk: RTMPChunk, locked: UnsafeMutablePointer<UInt32>? = nil) -> Int {
 		let queuedAt = Date()
-		queueBytesOut.mutate { $0 += Int64(chunk.data.count) }
 		bytesQueued.mutate { $0 += Int64(chunk.data.count) }
 		outputQueue.async {
 			let queuedFor = Date().timeIntervalSince(queuedAt)*1000
@@ -134,7 +133,7 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 				self.send(data: chunks[i])
 			}
 			self.send(data: chunks.last!, locked: locked)
-			self.queueBytesOut.mutate { $0 -= Int64(chunk.data.count) }
+			self.bytesOut.mutate { $0 += Int64(chunk.data.count) }
 		}
         if logger.isEnabledFor(level: .trace) {
             logger.trace(chunk)
@@ -145,14 +144,15 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     @discardableResult
     func send(data: Data, locked: UnsafeMutablePointer<UInt32>? = nil) -> Int {
 		guard connected else { return 0 }
+		queueBytesOut.mutate { $0 += Int64(chunk.data.count) }
 		var count = 0
 		do {
 			count = try self.connection?.write(from: data) ?? 0
 		} catch {
 			print(error)
 		}
+		self.queueBytesOut.mutate { $0 -= Int64(data.count) }
 		self.totalBytesOut.mutate { $0 += Int64(data.count) }
-		self.bytesOut.mutate { $0 += Int64(count) }
         return data.count
     }
 
