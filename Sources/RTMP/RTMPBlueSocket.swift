@@ -17,7 +17,7 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 		public var discarded = CoumpoundValue<Int64>()
 	}
 
-	open var writeTimeOut = 500.0
+	open var writeTimeOut = 5000.0
 	open var statisticsWindow = 5	// Seconds
 	open var statistics = Statistics()
 
