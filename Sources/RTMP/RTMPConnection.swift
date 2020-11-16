@@ -172,9 +172,10 @@ open class RTMPConnection: EventDispatcher {
     open var requireNetworkFramework = false
     /// This instance uses an RTMPBlueSocket
     open var useBlueSocket = true
-	/// Max amount of bytes waiting to be sent to trigger an 'insufficient bandwidht report'
-	/// Only works with BlueSocket
-	open var maxQueuedBytesCount = 30000
+	/// Max number of bytes  waiting to be sent acuumulated in one second needed trigger an 'insufficient bandwidth report'
+	/// That condition is: stats.queued.total - stats.sent.total > maxPendingByteCount
+	/// Only works with BlueSocket.
+	open var maxPendingByteCount = 10000
     /// The socket optional parameters.
     open var parameters: Any?
     /// The object encoding for this RTMPConnection instance.
@@ -441,7 +442,7 @@ open class RTMPConnection: EventDispatcher {
     private func on(timer: Timer) {
 		if let stats = (socket as? RTMPBlueSocket)?.statistics, !stats.queued.values.isEmpty {
 			let queued = stats.queued.total-stats.sent.total
-			if queued > maxQueuedBytesCount {
+			if queued > maxPendingByteCount {
 				for (_, stream) in streams {
 					stream.delegate?.rtmpStream(stream, didPublishInsufficientBW: self)
 				}

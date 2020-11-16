@@ -17,7 +17,7 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 		public var discarded = CoumpoundValue<Int64>()
 	}
 
-	open var writeTimeOut = 5000.0
+	open var writeTimeOut = -1		// Milliseconds. Inactive if < 0
 	open var statisticsWindow = 5	// Seconds
 	open var statistics = Statistics()
 
@@ -120,7 +120,7 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 		bytesQueued.mutate { $0 += Int64(chunk.data.count) }
 		outputQueue.async {
 			let queuedFor = Date().timeIntervalSince(queuedAt)*1000
-			guard queuedFor < self.writeTimeOut else {
+			guard self.writeTimeOut > 0 && Int(queuedFor) < self.writeTimeOut else {
 				self.bytesDiscarded.mutate { $0 += Int64(chunk.data.count) }
 				if logger.isEnabledFor(level: .trace) {
 					logger.warn("discarded \(chunk.data.count) after \(Int(queuedFor))")
