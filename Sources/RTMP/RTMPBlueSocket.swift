@@ -12,6 +12,7 @@ import Socket
 open class RTMPBlueSocket: RTMPSocketCompatible {	
 	public class Statistics {
 		public var received = CoumpoundValue<Int64>()
+		public var queued = CoumpoundValue<Int64>()
 		public var sent = CoumpoundValue<Int64>()
 		public var discarded = CoumpoundValue<Int64>()
 	}
@@ -43,8 +44,7 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     var queueBytesOut: Atomic<Int64> = .init(0)
     var totalBytesIn: Atomic<Int64> = .init(0)
     var totalBytesOut: Atomic<Int64> = .init(0)
-    var audioQueue: Atomic<Int64> = .init(0)
-    var videoQueue: Atomic<Int64> = .init(0)
+    var queued: Atomic<Int64> = .init(0)
 	var connected = false {
         didSet {
             if connected {
@@ -116,14 +116,7 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     @discardableResult
     func doOutput(chunk: RTMPChunk, locked: UnsafeMutablePointer<UInt32>? = nil) -> Int {
 		let queuedAt = Date()
-		if chunk.streamId == FLVTagType.audio.streamId {
-			audioQueue.mutate { $0 += 1 }
-		} else if chunk.streamId == FLVTagType.video.streamId {
-			videoQueue.mutate { $0 += 1 }
-		}
-		if logger.isEnabledFor(level: .trace) {
-			print("Queued: A \(audioQueue.value) V \(videoQueue.value)")
-		}
+		queued.mutate { $0 += 1 }
         outputQueue.async {
 			let queuedFor = Date().timeIntervalSince(queuedAt)*1000
 			guard queuedFor < self.writeTimeOut else {
@@ -140,11 +133,7 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 			}
 			self.send(data: chunks.last!, locked: locked)
 			
-			if chunk.streamId == FLVTagType.audio.streamId {
-				self.audioQueue.mutate { $0 -= 1 }
-			} else if chunk.streamId == FLVTagType.video.streamId {
-				self.videoQueue.mutate { $0 -= 1 }
-			}
+			self.queued.mutate { $0 -= 1 }
 		}
         if logger.isEnabledFor(level: .trace) {
             logger.trace(chunk)
@@ -222,5 +211,6 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 		statistics.received.add(totalIn, trim: statisticsWindow)
 		statistics.sent.add(totalOut, trim: statisticsWindow)
 		statistics.discarded.add(totalDiscarded, trim: statisticsWindow)
+		statistics.queued.add(queued.value, trim: statisticsWindow)
 	}
 }
