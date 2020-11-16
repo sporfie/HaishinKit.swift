@@ -119,11 +119,11 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 		let queuedAt = Date()
 		bytesQueued.mutate { $0 += Int64(chunk.data.count) }
 		outputQueue.async {
-			let queuedFor = Date().timeIntervalSince(queuedAt)*1000
-			guard self.writeTimeOut > 0 && Int(queuedFor) < self.writeTimeOut else {
+			let queuedFor = Int(Date().timeIntervalSince(queuedAt)*1000)
+			guard self.writeTimeOut < 0 || queuedFor < self.writeTimeOut else {
 				self.bytesDiscarded.mutate { $0 += Int64(chunk.data.count) }
 				if logger.isEnabledFor(level: .trace) {
-					logger.warn("discarded \(chunk.data.count) after \(Int(queuedFor))")
+					logger.warn("discarded \(chunk.data.count) after \(queuedFor)")
 				}
 				return
 			}
