@@ -144,10 +144,9 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     @discardableResult
     func send(data: Data, locked: UnsafeMutablePointer<UInt32>? = nil) -> Int {
 		guard connected else { return 0 }
-		queueBytesOut.mutate { $0 += Int64(chunk.data.count) }
-		var count = 0
+		queueBytesOut.mutate { $0 += Int64(data.count) }
 		do {
-			count = try self.connection?.write(from: data) ?? 0
+			try self.connection?.write(from: data)
 		} catch {
 			print(error)
 		}
