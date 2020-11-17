@@ -55,10 +55,11 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
                 return
             }
             readyState = .closed
-            for event in events {
+			let evts = events
+            events.removeAll()
+            for event in evts {
                 delegate?.dispatch(event: event)
             }
-            events.removeAll()
         }
     }
     var events: [Event] = []
@@ -149,6 +150,9 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
 			try self.connection?.write(from: data)
 		} catch {
 			print(error)
+			delegate?.dispatch(event:Event(type: .ioError, bubbles: false, data: error))
+			close(isDisconnected: true)
+			return 0
 		}
 		self.queueBytesOut.mutate { $0 -= Int64(data.count) }
 		self.totalBytesOut.mutate { $0 += Int64(data.count) }

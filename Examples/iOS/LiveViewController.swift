@@ -175,7 +175,7 @@ final class LiveViewController: UIViewController, RTMPStreamDelegate {
     @objc
     private func rtmpErrorHandler(_ notification: Notification) {
         logger.error(notification)
-        rtmpConnection.connect(Preference.defaultInstance.uri!)
+//        rtmpConnection.connect(Preference.defaultInstance.uri!)
     }
 
     func tapScreen(_ gesture: UIGestureRecognizer) {
