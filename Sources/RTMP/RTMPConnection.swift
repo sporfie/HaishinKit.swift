@@ -441,6 +441,10 @@ open class RTMPConnection: EventDispatcher {
     @objc
     private func on(timer: Timer) {
 		if let stats = (socket as? RTMPBlueSocket)?.statistics, !stats.queued.values.isEmpty {
+			// Run the timer callback on all streams
+			for (_, stream) in streams {
+				stream.on(timer: timer)
+			}
 			let queued = stats.queued.total-stats.sent.total
 			if queued > maxPendingByteCount {
 				for (_, stream) in streams {
