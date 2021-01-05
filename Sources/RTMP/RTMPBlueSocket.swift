@@ -162,16 +162,17 @@ open class RTMPBlueSocket: RTMPSocketCompatible {
     func setProperty(_ value: Any?, forKey: String) {
     }
 
-    private func receive() {
-		var data = Data(capacity: windowSizeC)
-		let count = (try? connection?.read(into: &data)) ?? 0
-		guard count > 0 else { return }
-		self.inputBuffer.append(data)
-		self.totalBytesIn.mutate { $0 += Int64(data.count) }
-		self.bytesIn.mutate { $0 += Int64(data.count) }
-		self.listen()
-		self.receive()
-    }
+	private func receive() {
+		while(connected) {
+			var data = Data(capacity: windowSizeC)
+			let count = (try? connection?.read(into: &data)) ?? 0
+			guard count > 0 else { return }
+			self.inputBuffer.append(data)
+			self.totalBytesIn.mutate { $0 += Int64(data.count) }
+			self.bytesIn.mutate { $0 += Int64(data.count) }
+			self.listen()
+		}
+	}
 
     private func listen() {
         switch readyState {
