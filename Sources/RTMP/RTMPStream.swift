@@ -325,6 +325,7 @@ open class RTMPStream: NetStream {
         dispatcher = EventDispatcher(target: self)
         addEventListener(.rtmpStatus, selector: #selector(on(status:)), observer: self)
         rtmpConnection.addEventListener(.rtmpStatus, selector: #selector(on(status:)), observer: self)
+		mixer.delegate = self
         if rtmpConnection.connected {
             rtmpConnection.createStream(self)
         }
@@ -630,7 +631,6 @@ extension RTMPStream: RTMPMuxerDelegate {
 extension RTMPStream: AVMixerDelegate {
     // MARK: AVMixerDelegate
     func didOutputVideo(_ buffer: CMSampleBuffer) {
-        frameCount += 1
         delegate?.rtmpStream(self, didOutput: buffer)
     }
 
