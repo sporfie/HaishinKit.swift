@@ -452,7 +452,7 @@ open class RTMPStream: NetStream {
         }
     }
 
-    open func close() {
+    override open func close() {
         if readyState == .closed {
             return
         }

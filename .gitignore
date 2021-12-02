@@ -23,3 +23,5 @@ HaishinKit.xcodeproj/project.xcworkspace/xcuserdata/shogo.xcuserdatad/WorkspaceS
 *.xcsettings
 docs/undocumented.json
 fastlane/report.xml
+Vendor/SRT/OpenSSL
+Vendor/SRT/srt/

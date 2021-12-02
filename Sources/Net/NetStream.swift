@@ -129,6 +129,10 @@ open class NetStream: NSObject {
         }
     }
 
+	open func close() {
+		// Cleanly stop everything
+	}
+	
     open func dispose() {
         lockQueue.async {
             self.mixer.dispose()
