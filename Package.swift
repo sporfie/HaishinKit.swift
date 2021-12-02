@@ -29,7 +29,8 @@ let package = Package(
                     "Media",
                     "Net",
                     "PiP",
-                    "RTMP",
+					"RTMP",
+					"SRT",
                     "Util",
                     "Platforms"
                 ])
