@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-#import "../../../Vendor/SRT/srt/srtcore/srt.h"
+#import "../../../Vendor/SRT/Includes/srt.h"
 
 static NSString *const __nonnull HaishinKitIdentifier = @"com.haishinkit.HaishinKit";
 FOUNDATION_EXPORT double HaishinKitVersionNumber;

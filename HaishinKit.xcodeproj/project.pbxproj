@@ -729,37 +729,6 @@
 		BCFB355924FA40DD00DC5108 /* PlaybackContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackContainerViewController.swift; sourceTree = "<group>"; };
 		BCFB355D24FAB2D200DC5108 /* HKPictureInPicureControllerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKPictureInPicureControllerImpl.swift; sourceTree = "<group>"; };
 		E425679C27576307005BA01D /* libsrt-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libsrt-iOS.a"; sourceTree = "<group>"; };
-		E425679E27576307005BA01D /* platform_sys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = platform_sys.h; sourceTree = "<group>"; };
-		E425679F27576307005BA01D /* netinet_any.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = netinet_any.h; sourceTree = "<group>"; };
-		E42567A027576307005BA01D /* fec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fec.h; sourceTree = "<group>"; };
-		E42567A127576307005BA01D /* channel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = channel.h; sourceTree = "<group>"; };
-		E42567A227576307005BA01D /* core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
-		E42567A327576307005BA01D /* version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
-		E42567A427576307005BA01D /* threadname.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadname.h; sourceTree = "<group>"; };
-		E42567A527576307005BA01D /* handshake.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = handshake.h; sourceTree = "<group>"; };
-		E42567A627576307005BA01D /* epoll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = epoll.h; sourceTree = "<group>"; };
-		E42567A727576307005BA01D /* packetfilter_builtin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = packetfilter_builtin.h; sourceTree = "<group>"; };
-		E42567A827576307005BA01D /* md5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
-		E42567A927576307005BA01D /* utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
-		E42567AA27576307005BA01D /* cache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cache.h; sourceTree = "<group>"; };
-		E42567AB27576307005BA01D /* window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = window.h; sourceTree = "<group>"; };
-		E42567AC27576307005BA01D /* logging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = logging.h; sourceTree = "<group>"; };
-		E42567AD27576307005BA01D /* srt_compat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = srt_compat.h; sourceTree = "<group>"; };
-		E42567AE27576307005BA01D /* crypto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto.h; sourceTree = "<group>"; };
-		E42567AF27576307005BA01D /* api.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = api.h; sourceTree = "<group>"; };
-		E42567B027576307005BA01D /* congctl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = congctl.h; sourceTree = "<group>"; };
-		E42567B127576307005BA01D /* list.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
-		E42567B227576307005BA01D /* buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = buffer.h; sourceTree = "<group>"; };
-		E42567B327576307005BA01D /* srt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = srt.h; sourceTree = "<group>"; };
-		E42567B427576307005BA01D /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
-		E42567B527576307005BA01D /* packet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = packet.h; sourceTree = "<group>"; };
-		E42567B627576307005BA01D /* logging_api.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = logging_api.h; sourceTree = "<group>"; };
-		E42567B727576307005BA01D /* packetfilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = packetfilter.h; sourceTree = "<group>"; };
-		E42567B827576307005BA01D /* ccc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ccc.h; sourceTree = "<group>"; };
-		E42567B927576307005BA01D /* udt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = udt.h; sourceTree = "<group>"; };
-		E42567BA27576307005BA01D /* srt4udt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = srt4udt.h; sourceTree = "<group>"; };
-		E42567BB27576307005BA01D /* packetfilter_api.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = packetfilter_api.h; sourceTree = "<group>"; };
-		E42567BC27576307005BA01D /* queue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = queue.h; sourceTree = "<group>"; };
 		E42567BD27576307005BA01D /* build-srt-iOS.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "build-srt-iOS.sh"; sourceTree = "<group>"; };
 		E42567BE27576307005BA01D /* build-openssl-iOS.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "build-openssl-iOS.sh"; sourceTree = "<group>"; };
 		E42567C227576307005BA01D /* srt-file-transmit */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "srt-file-transmit"; sourceTree = "<group>"; };
@@ -2671,51 +2640,12 @@
 			isa = PBXGroup;
 			children = (
 				E425679C27576307005BA01D /* libsrt-iOS.a */,
-				E425679D27576307005BA01D /* Includes */,
 				E42567BD27576307005BA01D /* build-srt-iOS.sh */,
 				E42567BE27576307005BA01D /* build-openssl-iOS.sh */,
 				E42567BF27576307005BA01D /* build */,
 				E4256BAE27576309005BA01D /* OpenSSL */,
 			);
 			path = SRT;
-			sourceTree = "<group>";
-		};
-		E425679D27576307005BA01D /* Includes */ = {
-			isa = PBXGroup;
-			children = (
-				E425679E27576307005BA01D /* platform_sys.h */,
-				E425679F27576307005BA01D /* netinet_any.h */,
-				E42567A027576307005BA01D /* fec.h */,
-				E42567A127576307005BA01D /* channel.h */,
-				E42567A227576307005BA01D /* core.h */,
-				E42567A327576307005BA01D /* version.h */,
-				E42567A427576307005BA01D /* threadname.h */,
-				E42567A527576307005BA01D /* handshake.h */,
-				E42567A627576307005BA01D /* epoll.h */,
-				E42567A727576307005BA01D /* packetfilter_builtin.h */,
-				E42567A827576307005BA01D /* md5.h */,
-				E42567A927576307005BA01D /* utilities.h */,
-				E42567AA27576307005BA01D /* cache.h */,
-				E42567AB27576307005BA01D /* window.h */,
-				E42567AC27576307005BA01D /* logging.h */,
-				E42567AD27576307005BA01D /* srt_compat.h */,
-				E42567AE27576307005BA01D /* crypto.h */,
-				E42567AF27576307005BA01D /* api.h */,
-				E42567B027576307005BA01D /* congctl.h */,
-				E42567B127576307005BA01D /* list.h */,
-				E42567B227576307005BA01D /* buffer.h */,
-				E42567B327576307005BA01D /* srt.h */,
-				E42567B427576307005BA01D /* common.h */,
-				E42567B527576307005BA01D /* packet.h */,
-				E42567B627576307005BA01D /* logging_api.h */,
-				E42567B727576307005BA01D /* packetfilter.h */,
-				E42567B827576307005BA01D /* ccc.h */,
-				E42567B927576307005BA01D /* udt.h */,
-				E42567BA27576307005BA01D /* srt4udt.h */,
-				E42567BB27576307005BA01D /* packetfilter_api.h */,
-				E42567BC27576307005BA01D /* queue.h */,
-			);
-			path = Includes;
 			sourceTree = "<group>";
 		};
 		E42567BF27576307005BA01D /* build */ = {
@@ -6461,7 +6391,7 @@
 					"$(PROJECT_DIR)/Vendor/SRT",
 					"$(PROJECT_DIR)/Vendor/SRT/OpenSSL/iphoneos/lib",
 				);
-				MARKETING_VERSION = 1.3.3;
+				MARKETING_VERSION = 1.3.4;
 				ONLY_ACTIVE_ARCH = YES;
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = com.haishinkit.HaishinKit;
@@ -6500,7 +6430,7 @@
 					"$(PROJECT_DIR)/Vendor/SRT",
 					"$(PROJECT_DIR)/Vendor/SRT/OpenSSL/iphoneos/lib",
 				);
-				MARKETING_VERSION = 1.3.3;
+				MARKETING_VERSION = 1.3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.haishinkit.HaishinKit;
 				PRODUCT_NAME = HaishinKit;
 				PROVISIONING_PROFILE = "";
