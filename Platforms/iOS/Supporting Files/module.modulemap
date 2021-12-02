@@ -1,6 +1,10 @@
 module HaishinKit [system] {
-	header "../../../Vendor/SRT/srt/srtcore/srt.h"
 	header "../HaishinKit.h"
     export *
+	
+	module srt {
+		header "../../../Vendor/SRT/srt/srtcore/srt.h"
+		export *
+	}
 }
 
