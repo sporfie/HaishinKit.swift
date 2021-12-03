@@ -401,6 +401,8 @@
 		E44F1201255E972400D19882 /* CoumpoundValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F1200255E972400D19882 /* CoumpoundValue.swift */; };
 		E44F1202255E972400D19882 /* CoumpoundValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F1200255E972400D19882 /* CoumpoundValue.swift */; };
 		E44F1203255E972400D19882 /* CoumpoundValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44F1200255E972400D19882 /* CoumpoundValue.swift */; };
+		E495A14B275A5405003C4F0A /* Includes in Resources */ = {isa = PBXBuildFile; fileRef = E495A145275A5405003C4F0A /* Includes */; };
+		E495A14C275A5415003C4F0A /* Includes in Headers */ = {isa = PBXBuildFile; fileRef = E495A145275A5405003C4F0A /* Includes */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2103,6 +2105,7 @@
 		E4256DD227576E60005BA01D /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		E44F11F8255D7DE800D19882 /* RTMPBlueSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPBlueSocket.swift; sourceTree = "<group>"; };
 		E44F1200255E972400D19882 /* CoumpoundValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoumpoundValue.swift; sourceTree = "<group>"; };
+		E495A145275A5405003C4F0A /* Includes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Includes; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2642,6 +2645,7 @@
 				E425679C27576307005BA01D /* libsrt-iOS.a */,
 				E42567BD27576307005BA01D /* build-srt-iOS.sh */,
 				E42567BE27576307005BA01D /* build-openssl-iOS.sh */,
+				E495A145275A5405003C4F0A /* Includes */,
 				E42567BF27576307005BA01D /* build */,
 				E4256BAE27576309005BA01D /* OpenSSL */,
 			);
@@ -5240,6 +5244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29EF03781CD79A5400473D99 /* HaishinKit.h in Headers */,
+				E495A14C275A5415003C4F0A /* Includes in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5576,6 +5581,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E495A14B275A5405003C4F0A /* Includes in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
