@@ -1,6 +1,5 @@
-module HaishinKit [system] {
+framework module HaishinKit [system] {
 	header "HaishinKit.h"
-	umbrella header "../../Vendor/SRT/Includes/srt.h"
 	export *
 }
 
