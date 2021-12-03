@@ -1,5 +1,0 @@
-module HaishinKit [system] {
-	header "../HaishinKit.h"
-    export *	
-}
-

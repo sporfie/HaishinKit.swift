@@ -1,0 +1,6 @@
+module HaishinKit [system] {
+	header "HaishinKit.h"
+	header "../../Vendor/SRT/Includes/srt.h"
+	export *
+}
+

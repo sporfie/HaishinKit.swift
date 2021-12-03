@@ -2504,8 +2504,8 @@
 		299F7E391CD71A86001E7272 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				E4256DD127576E60005BA01D /* Supporting Files */,
 				29D3D4D41ED04E7100DD4AA6 /* DeviceUtil+Extenstion.swift */,
+				E4256DD227576E60005BA01D /* module.modulemap */,
 				299F7E3B1CD71A97001E7272 /* HaishinKit.h */,
 				299B13261D3B751400A1E8F5 /* HKView.swift */,
 				299F7E3A1CD71A97001E7272 /* Info.plist */,
@@ -5232,14 +5232,6 @@
 			path = SRT;
 			sourceTree = "<group>";
 		};
-		E4256DD127576E60005BA01D /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				E4256DD227576E60005BA01D /* module.modulemap */,
-			);
-			path = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -6391,14 +6383,14 @@
 					"$(PROJECT_DIR)/Vendor/SRT",
 					"$(PROJECT_DIR)/Vendor/SRT/OpenSSL/iphoneos/lib",
 				);
-				MARKETING_VERSION = 1.3.4;
+				MARKETING_VERSION = 1.3.5;
 				ONLY_ACTIVE_ARCH = YES;
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = com.haishinkit.HaishinKit;
 				PRODUCT_NAME = HaishinKit;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "\"$(SRCROOT)/Platforms/iOS/Supporting Files\"";
+				SWIFT_INCLUDE_PATHS = "\"$(SRCROOT)/Platforms/iOS\"";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -6430,12 +6422,12 @@
 					"$(PROJECT_DIR)/Vendor/SRT",
 					"$(PROJECT_DIR)/Vendor/SRT/OpenSSL/iphoneos/lib",
 				);
-				MARKETING_VERSION = 1.3.4;
+				MARKETING_VERSION = 1.3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.haishinkit.HaishinKit;
 				PRODUCT_NAME = HaishinKit;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "\"$(SRCROOT)/Platforms/iOS/Supporting Files\"";
+				SWIFT_INCLUDE_PATHS = "\"$(SRCROOT)/Platforms/iOS\"";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
