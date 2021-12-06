@@ -703,7 +703,6 @@
 		E44F11F8255D7DE800D19882 /* RTMPBlueSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPBlueSocket.swift; sourceTree = "<group>"; };
 		E44F1200255E972400D19882 /* CoumpoundValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoumpoundValue.swift; sourceTree = "<group>"; };
 		E48480F0275E0D1E004E603B /* SporfieSRT.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SporfieSRT.xcframework; sourceTree = "<group>"; };
-		E495A14D275A577E003C4F0A /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -906,7 +905,6 @@
 				2997BDD31D50D31B000AF900 /* README.md */,
 				29F04FF21F3388B000172706 /* HaishinKit.podspec */,
 				29F39BE72335F8010055F9BB /* Package.swift */,
-				E495A14D275A577E003C4F0A /* module.modulemap */,
 				2968973E1CDB01920074D5F0 /* Examples */,
 				0ACC00B98D6DB33B5BE87B87 /* Frameworks */,
 				299F7E371CD71A76001E7272 /* Platforms */,
@@ -2306,15 +2304,13 @@
 					"@loader_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.3.6;
-				MODULEMAP_FILE = module.modulemap;
+				MARKETING_VERSION = 1.3.7;
 				ONLY_ACTIVE_ARCH = YES;
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = com.haishinkit.HaishinKit;
 				PRODUCT_NAME = HaishinKit;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2342,13 +2338,11 @@
 					"@loader_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.3.6;
-				MODULEMAP_FILE = module.modulemap;
+				MARKETING_VERSION = 1.3.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.haishinkit.HaishinKit;
 				PRODUCT_NAME = HaishinKit;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
