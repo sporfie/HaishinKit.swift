@@ -1,5 +1,6 @@
 import Foundation
 import AVFoundation
+import SporfieSRT
 
 open class SRTStream: NetStream {
     public enum ReadyState {

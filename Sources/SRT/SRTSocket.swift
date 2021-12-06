@@ -1,5 +1,6 @@
 import Foundation
 import Logboard
+import SporfieSRT
 
 protocol SRTSocketDelegate: AnyObject {
 	func status(_ socket: SRTSocket, status: SRT_SOCKSTATUS)

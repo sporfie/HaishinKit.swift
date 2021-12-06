@@ -1,0 +1,4 @@
+module SporfieSRT {
+	header "srt.h"
+	export *
+}
