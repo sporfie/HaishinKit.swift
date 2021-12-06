@@ -2306,7 +2306,7 @@
 					"@loader_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.3.5;
+				MARKETING_VERSION = 1.3.6;
 				MODULEMAP_FILE = module.modulemap;
 				ONLY_ACTIVE_ARCH = YES;
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-Xfrontend -debug-time-function-bodies";
@@ -2342,7 +2342,7 @@
 					"@loader_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.3.5;
+				MARKETING_VERSION = 1.3.6;
 				MODULEMAP_FILE = module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.haishinkit.HaishinKit;
 				PRODUCT_NAME = HaishinKit;
