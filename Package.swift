@@ -13,8 +13,8 @@ let package = Package(
         .library(name: "HaishinKit", type: .dynamic, targets: ["HaishinKit"])
     ],
     dependencies: [
-        .package(url: "https://github.com/shogo4405/Logboard.git", from: "2.2.1"),
-		.package(url: "https://github.com/Kitura/BlueSocket.git", from: "1.0.200")
+        .package(url: "https://github.com/shogo4405/Logboard.git", from: "2.2.2"),
+		.package(url: "https://github.com/Kitura/BlueSocket.git", from: "1.0.200"),
     ],
     targets: [
         .target(name: "SwiftPMSupport"),
@@ -30,7 +30,6 @@ let package = Package(
                     "Net",
                     "PiP",
 					"RTMP",
-					"SRT",
                     "Util",
                     "Platforms"
                 ])

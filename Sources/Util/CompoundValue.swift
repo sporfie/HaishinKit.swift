@@ -1,5 +1,5 @@
 //
-//  CoumpoundValue.swift
+//  CompoundValue.swift
 //  HaishinKit
 //
 //  Created by Guy on 13.11.20.
@@ -8,13 +8,14 @@
 
 import Foundation
 
-open class CoumpoundValue<T: Numeric> {
+open class CompoundValue<T: Numeric> {
 	open var values = [T]()
 	open var total: T {
 		return values.reduce(0) { (current: T, value: T) -> T in
 			return current + value
 		}
 	}
+	public init() {}
 	open func add(_ value: T, trim: Int) {
 		values.append(value)
 		while values.count > trim {

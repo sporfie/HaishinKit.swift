@@ -11,10 +11,10 @@ import Socket
 
 open class RTMPBlueSocket: RTMPSocketCompatible {	
 	public class Statistics {
-		public var received = CoumpoundValue<Int64>()
-		public var queued = CoumpoundValue<Int64>()
-		public var sent = CoumpoundValue<Int64>()
-		public var discarded = CoumpoundValue<Int64>()
+		public var received = CompoundValue<Int64>()
+		public var queued = CompoundValue<Int64>()
+		public var sent = CompoundValue<Int64>()
+		public var discarded = CompoundValue<Int64>()
 	}
 
 	open var writeTimeOut = -1		// Milliseconds. Inactive if < 0

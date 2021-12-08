@@ -40,22 +40,22 @@ final class LiveViewController: UIViewController, RTMPStreamDelegate {
 
     private var rtmpConnection = RTMPConnection()
     private var rtmpStream: RTMPStream!
-	private var srtSocket = SRTSocket()
-	private var srtStream: SRTStream!
+//	private var srtSocket = SRTSocket()
+//	private var srtStream: SRTStream!
 	private var stream: NetStream!
     private var sharedObject: RTMPSharedObject!
     private var currentEffect: VideoEffect?
     private var currentPosition: AVCaptureDevice.Position = .back
     private var retryCount: Int = 0
-	let useSRT = Preference.defaultInstance.uri!.starts(with: "srt://")
+	let useSRT = false // Preference.defaultInstance.uri!.starts(with: "srt://")
 	var watchingSRTStats = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
 		if useSRT {
-			srtStream = SRTStream(url: URL(string: Preference.defaultInstance.uri!)!)
-			stream = srtStream
+//			srtStream = SRTStream(url: URL(string: Preference.defaultInstance.uri!)!)
+//			stream = srtStream
 		} else {
 			rtmpConnection.networkServiceType = .video
 			rtmpStream = RTMPStream(connection: rtmpConnection)
@@ -147,8 +147,8 @@ final class LiveViewController: UIViewController, RTMPStreamDelegate {
         if publish.isSelected {
             UIApplication.shared.isIdleTimerDisabled = false
 			if useSRT {
-				srtStream.close()
-				watchingSRTStats = false
+//				srtStream.close()
+//				watchingSRTStats = false
 			} else {
 				rtmpConnection.close()
 				rtmpConnection.removeEventListener(.rtmpStatus, selector: #selector(rtmpStatusHandler), observer: self)
@@ -158,9 +158,9 @@ final class LiveViewController: UIViewController, RTMPStreamDelegate {
         } else {
             UIApplication.shared.isIdleTimerDisabled = true
 			if useSRT {
-				srtStream.publish()
-				watchingSRTStats = true
-				watchSRTStats()
+//				srtStream.publish()
+//				watchingSRTStats = true
+//				watchSRTStats()
 			} else {
 				rtmpConnection.addEventListener(.rtmpStatus, selector: #selector(rtmpStatusHandler), observer: self)
 				rtmpConnection.addEventListener(.ioError, selector: #selector(rtmpErrorHandler), observer: self)
@@ -171,14 +171,14 @@ final class LiveViewController: UIViewController, RTMPStreamDelegate {
         publish.isSelected.toggle()
     }
 	
-	func watchSRTStats() {
-		guard self.watchingSRTStats else { return }
-		let stats = srtStream.socket.stats
-		print("SRT stats: \(stats)")
-		DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-			self.watchSRTStats()
-		}
-	}
+//	func watchSRTStats() {
+//		guard self.watchingSRTStats else { return }
+//		let stats = srtStream.socket.stats
+//		print("SRT stats: \(stats)")
+//		DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+//			self.watchSRTStats()
+//		}
+//	}
 		
     @objc
     private func rtmpStatusHandler(_ notification: Notification) {
