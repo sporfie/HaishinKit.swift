@@ -47,7 +47,7 @@ extension RTMPMuxer: AudioConverterDelegate {
 
 extension RTMPMuxer: VideoEncoderDelegate {
     // MARK: VideoEncoderDelegate
-    func didSetFormatDescription(video formatDescription: CMFormatDescription?) {
+	func didSetFormatDescription(video formatDescription: CMFormatDescription?, codec: CMVideoCodecType) {
         guard
             let formatDescription = formatDescription,
             let avcC = AVCConfigurationRecord.getData(formatDescription) else {

@@ -240,14 +240,17 @@ extension TSWriter: AudioConverterDelegate {
 
 extension TSWriter: VideoEncoderDelegate {
     // MARK: VideoEncoderDelegate
-    public func didSetFormatDescription(video formatDescription: CMFormatDescription?) {
+	public func didSetFormatDescription(video formatDescription: CMFormatDescription?, codec: CMVideoCodecType) {
         guard
             let formatDescription: CMFormatDescription = formatDescription,
             let avcC: Data = AVCConfigurationRecord.getData(formatDescription) else {
             return
         }
         var data = ElementaryStreamSpecificData()
-        data.streamType = ElementaryStreamType.h264.rawValue
+		var streamType = ElementaryStreamType.h264.rawValue
+		if codec == kCMVideoCodecType_H264 { streamType = ElementaryStreamType.h264.rawValue }
+		if codec == kCMVideoCodecType_HEVC { streamType = ElementaryStreamType.h265.rawValue }
+		data.streamType = streamType
         data.elementaryPID = TSWriter.defaultVideoPID
         PMT.elementaryStreamSpecificData.append(data)
         videoContinuityCounter = 0

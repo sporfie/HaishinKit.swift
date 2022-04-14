@@ -7,7 +7,7 @@ import UIKit
 #endif
 
 public protocol VideoEncoderDelegate: AnyObject {
-    func didSetFormatDescription(video formatDescription: CMFormatDescription?)
+	func didSetFormatDescription(video formatDescription: CMFormatDescription?, codec: CMVideoCodecType)
     func sampleOutput(video sampleBuffer: CMSampleBuffer)
 }
 
@@ -157,7 +157,7 @@ public final class H26XEncoder {
             guard !CMFormatDescriptionEqual(formatDescription, otherFormatDescription: oldValue) else {
                 return
             }
-            delegate?.didSetFormatDescription(video: formatDescription)
+			delegate?.didSetFormatDescription(video: formatDescription, codec: codec)
         }
     }
     weak var delegate: VideoEncoderDelegate?
