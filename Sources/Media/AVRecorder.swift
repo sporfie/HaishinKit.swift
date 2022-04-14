@@ -20,7 +20,7 @@ open class AVRecorder: NSObject {
             AVNumberOfChannelsKey: 0
         ],
         .video: [
-			AVVideoCodecKey: AVVideoCodecType.h264,
+			AVVideoCodecKey: AVVideoCodecH264,
             AVVideoHeightKey: 0,
             AVVideoWidthKey: 0
         ]

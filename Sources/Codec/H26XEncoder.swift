@@ -122,7 +122,11 @@ public final class H26XEncoder {
 	var profileLevel: String {
 		get {
 			if _profileLevel != nil { return _profileLevel! }
-			return (codec == kCMVideoCodecType_HEVC ? kVTProfileLevel_HEVC_Main_AutoLevel : kVTProfileLevel_H264_Baseline_3_1) as String
+			if #available(iOS 11.0, *) {
+				return (codec == kCMVideoCodecType_HEVC ? kVTProfileLevel_HEVC_Main_AutoLevel : kVTProfileLevel_H264_Baseline_3_1) as String
+			} else {
+				return kVTProfileLevel_H264_Baseline_3_1 as String
+			}
 		}
         set {
             guard _profileLevel != newValue else { return }
