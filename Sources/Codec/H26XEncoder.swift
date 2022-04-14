@@ -250,7 +250,7 @@ public final class H26XEncoder {
         }
     }
 
-	init(codec: CMVideoCodecType = kCMVideoCodecType_H264) {
+	public init(codec: CMVideoCodecType = kCMVideoCodecType_H264) {
 		self.codec = codec
         settings.observer = self
     }
