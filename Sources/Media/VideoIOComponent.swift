@@ -41,8 +41,8 @@ public final class VideoIOComponent: IOComponent {
             decoder.formatDescription = formatDescription
         }
     }
-    lazy var encoder = H26XEncoder()
-    lazy var decoder = H264Decoder()
+    public lazy var encoder = H26XEncoder()
+	public lazy var decoder = H264Decoder()
     lazy var queue: DisplayLinkedQueue = {
         let queue = DisplayLinkedQueue()
         queue.delegate = self

@@ -12,7 +12,7 @@ protocol VideoDecoderDelegate: AnyObject {
 }
 
 // MARK: -
-final class H264Decoder {
+public final class H264Decoder {
     static let defaultDecodeFlags: VTDecodeFrameFlags = [
         ._EnableAsynchronousDecompression,
         ._EnableTemporalProcessing
@@ -42,7 +42,7 @@ final class H264Decoder {
             invalidateSession = true
         }
     }
-    var isRunning: Atomic<Bool> = .init(false)
+	public var isRunning: Atomic<Bool> = .init(false)
     weak var delegate: VideoDecoderDelegate?
     var lockQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.H264Decoder.lock")
 
@@ -192,7 +192,7 @@ final class H264Decoder {
 
 extension H264Decoder: Running {
     // MARK: Running
-    func startRunning() {
+	public func startRunning() {
         lockQueue.async {
             self.isRunning.mutate { $0 = true }
             #if os(iOS)
@@ -212,7 +212,7 @@ extension H264Decoder: Running {
         }
     }
 
-    func stopRunning() {
+	public func stopRunning() {
         lockQueue.async {
             self.session = nil
             self.needsSync.mutate { $0 = true }
