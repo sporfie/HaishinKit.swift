@@ -43,7 +43,7 @@ open class NetStream: NSObject {
     }
 
     /// Specify stream video compression properties.
-    open var videoSettings: Setting<H264Encoder, H264Encoder.Option> {
+    open var videoSettings: Setting<H26XEncoder, H26XEncoder.Option> {
         get { mixer.videoIO.encoder.settings }
         set { mixer.videoIO.encoder.settings = newValue }
     }

@@ -12,7 +12,7 @@ public protocol VideoEncoderDelegate: AnyObject {
 }
 
 // MARK: -
-public final class H264Encoder {
+public final class H26XEncoder {
     public enum Option: String, KeyPathRepresentable, CaseIterable {
         case muted
         case width
@@ -28,23 +28,23 @@ public final class H264Encoder {
         public var keyPath: AnyKeyPath {
             switch self {
             case .muted:
-                return \H264Encoder.muted
+                return \H26XEncoder.muted
             case .width:
-                return \H264Encoder.width
+                return \H26XEncoder.width
             case .height:
-                return \H264Encoder.height
+                return \H26XEncoder.height
             case .bitrate:
-                return \H264Encoder.bitrate
+                return \H26XEncoder.bitrate
             #if os(macOS)
             case .enabledHardwareEncoder:
-                return \H264Encoder.enabledHardwareEncoder
+                return \H26XEncoder.enabledHardwareEncoder
             #endif
             case .maxKeyFrameIntervalDuration:
-                return \H264Encoder.maxKeyFrameIntervalDuration
+                return \H26XEncoder.maxKeyFrameIntervalDuration
             case .scalingMode:
-                return \H264Encoder.scalingMode
+                return \H26XEncoder.scalingMode
             case .profileLevel:
-                return \H264Encoder.profileLevel
+                return \H26XEncoder.profileLevel
             }
         }
     }
@@ -66,15 +66,16 @@ public final class H264Encoder {
     ]
     #endif
 
-    public var settings: Setting<H264Encoder, Option> = [:] {
+    public var settings: Setting<H26XEncoder, Option> = [:] {
         didSet {
             settings.observer = self
         }
     }
     public private(set) var isRunning: Atomic<Bool> = .init(false)
 
+	let codec: CMVideoCodecType
     var muted: Bool = false
-    var scalingMode: ScalingMode = H264Encoder.defaultScalingMode {
+    var scalingMode: ScalingMode = H26XEncoder.defaultScalingMode {
         didSet {
             guard scalingMode != oldValue else {
                 return
@@ -83,7 +84,7 @@ public final class H264Encoder {
         }
     }
 
-    var width: Int32 = H264Encoder.defaultWidth {
+    var width: Int32 = H26XEncoder.defaultWidth {
         didSet {
             guard width != oldValue else {
                 return
@@ -91,7 +92,7 @@ public final class H264Encoder {
             invalidateSession = true
         }
     }
-    var height: Int32 = H264Encoder.defaultHeight {
+    var height: Int32 = H26XEncoder.defaultHeight {
         didSet {
             guard height != oldValue else {
                 return
@@ -109,7 +110,7 @@ public final class H264Encoder {
         }
     }
     #endif
-    var bitrate: UInt32 = H264Encoder.defaultBitrate {
+    var bitrate: UInt32 = H26XEncoder.defaultBitrate {
         didSet {
             guard bitrate != oldValue else {
                 return
@@ -117,11 +118,15 @@ public final class H264Encoder {
             setProperty(kVTCompressionPropertyKey_AverageBitRate, Int(bitrate) as CFTypeRef)
         }
     }
-    var profileLevel: String = kVTProfileLevel_H264_Baseline_3_1 as String {
-        didSet {
-            guard profileLevel != oldValue else {
-                return
-            }
+	var _profileLevel: String?
+	var profileLevel: String {
+		get {
+			if _profileLevel != nil { return _profileLevel! }
+			return (codec == kCMVideoCodecType_HEVC ? kVTProfileLevel_HEVC_Main_AutoLevel : kVTProfileLevel_H264_Baseline_3_1) as String
+		}
+        set {
+            guard _profileLevel != newValue else { return }
+			_profileLevel = newValue
             invalidateSession = true
         }
     }
@@ -134,7 +139,7 @@ public final class H264Encoder {
         }
     }
     var locked: UInt32 = 0
-    var lockQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.H264Encoder.lock")
+    var lockQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.H26XEncoder.lock")
     var expectedFPS: Float64 = AVMixer.defaultFPS {
         didSet {
             guard expectedFPS != oldValue else {
@@ -155,7 +160,7 @@ public final class H264Encoder {
 	
     private(set) var status: OSStatus = noErr
     private var attributes: [NSString: AnyObject] {
-        var attributes: [NSString: AnyObject] = H264Encoder.defaultAttributes
+        var attributes: [NSString: AnyObject] = H26XEncoder.defaultAttributes
         attributes[kCVPixelBufferWidthKey] = NSNumber(value: width)
         attributes[kCVPixelBufferHeightKey] = NSNumber(value: height)
         return attributes
@@ -179,12 +184,13 @@ public final class H264Encoder {
         ]
 #if os(OSX)
         if enabledHardwareEncoder {
-            properties[kVTVideoEncoderSpecification_EncoderID] = "com.apple.videotoolbox.videoencoder.h264.gva" as NSObject
+			let encid = codec == kCMVideoCodecType_HEVC ? "com.apple.videotoolbox.videoencoder.hevc.gva" : "com.apple.videotoolbox.videoencoder.h264.gva"
+            properties[kVTVideoEncoderSpecification_EncoderID] = encid as NSObject
             properties["EnableHardwareAcceleratedVideoEncoder"] = kCFBooleanTrue
             properties["RequireHardwareAcceleratedVideoEncoder"] = kCFBooleanTrue
         }
 #endif
-        if !isBaseline {
+        if !isBaseline && codec == kCMVideoCodecType_H264 {
             properties[kVTCompressionPropertyKey_H264EntropyMode] = kVTH264EntropyMode_CABAC
         }
         return properties
@@ -200,7 +206,7 @@ public final class H264Encoder {
                 }
             return
         }
-        let encoder: H264Encoder = Unmanaged<H264Encoder>.fromOpaque(refcon).takeUnretainedValue()
+        let encoder: H26XEncoder = Unmanaged<H26XEncoder>.fromOpaque(refcon).takeUnretainedValue()
         encoder.formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer)
         encoder.delegate?.sampleOutput(video: sampleBuffer)
     }
@@ -213,7 +219,7 @@ public final class H264Encoder {
                     allocator: kCFAllocatorDefault,
                     width: width,
                     height: height,
-                    codecType: kCMVideoCodecType_H264,
+                    codecType: codec,
                     encoderSpecification: nil,
                     imageBufferAttributes: attributes as CFDictionary?,
                     compressedDataAllocator: nil,
@@ -240,7 +246,8 @@ public final class H264Encoder {
         }
     }
 
-    init() {
+	init(codec: CMVideoCodecType = kCMVideoCodecType_H264) {
+		self.codec = codec
         settings.observer = self
     }
 
@@ -306,7 +313,7 @@ public final class H264Encoder {
 #endif
 }
 
-extension H264Encoder: Running {
+extension H26XEncoder: Running {
     // MARK: Running
     public func startRunning() {
         lockQueue.async {

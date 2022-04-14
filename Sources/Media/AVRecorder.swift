@@ -1,6 +1,6 @@
 import AVFoundation
 
-public protocol AVRecorderDelegate: class {
+public protocol AVRecorderDelegate: AnyObject {
     var moviesDirectory: URL { get }
 
     func rotateFile(_ recorder: AVRecorder, withPresentationTimeStamp: CMTime, mediaType: AVMediaType)
@@ -20,7 +20,7 @@ open class AVRecorder: NSObject {
             AVNumberOfChannelsKey: 0
         ],
         .video: [
-            AVVideoCodecKey: AVVideoCodecH264,
+			AVVideoCodecKey: AVVideoCodecType.h264,
             AVVideoHeightKey: 0,
             AVVideoWidthKey: 0
         ]
