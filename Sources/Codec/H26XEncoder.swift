@@ -136,9 +136,7 @@ public final class H26XEncoder {
     }
     var maxKeyFrameIntervalDuration: Double = 2.0 {
         didSet {
-            guard maxKeyFrameIntervalDuration != oldValue else {
-                return
-            }
+            guard maxKeyFrameIntervalDuration != oldValue else { return }
             invalidateSession = true
         }
     }
@@ -146,17 +144,13 @@ public final class H26XEncoder {
     var lockQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.H26XEncoder.lock")
     var expectedFPS: Float64 = AVMixer.defaultFPS {
         didSet {
-            guard expectedFPS != oldValue else {
-                return
-            }
+            guard expectedFPS != oldValue else { return }
             setProperty(kVTCompressionPropertyKey_ExpectedFrameRate, NSNumber(value: expectedFPS))
         }
     }
     var formatDescription: CMFormatDescription? {
         didSet {
-            guard !CMFormatDescriptionEqual(formatDescription, otherFormatDescription: oldValue) else {
-                return
-            }
+            guard !CMFormatDescriptionEqual(formatDescription, otherFormatDescription: oldValue) else { return }
 			delegate?.didSetFormatDescription(video: formatDescription, codec: codec)
         }
     }

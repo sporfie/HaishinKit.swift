@@ -45,23 +45,28 @@ public class TSWriter: Running {
             writeProgramIfNeeded()
         }
     }
-    private var videoConfig: AVCConfigurationRecord? {
-        didSet {
-            writeProgramIfNeeded()
-        }
-    }
+	private var h264Config: AVCConfigurationRecord? {
+		didSet {
+			writeProgramIfNeeded()
+		}
+	}
+	private var h265Config: HEVCConfigurationRecord? {
+		didSet {
+			writeProgramIfNeeded()
+		}
+	}
     private var videoTimestamp: CMTime = .invalid
     private var audioTimestamp: CMTime = .invalid
     private var PCRTimestamp = CMTime.zero
     private var canWriteFor: Bool {
-        guard expectedMedias.isEmpty else {
+        guard !expectedMedias.isEmpty else {
             return true
         }
         if expectedMedias.contains(.audio) && expectedMedias.contains(.video) {
-            return audioConfig != nil && videoConfig != nil
+            return audioConfig != nil && (h264Config != nil || h265Config != nil)
         }
         if expectedMedias.contains(.video) {
-            return videoConfig != nil
+            return h264Config != nil || h265Config != nil
         }
         if expectedMedias.contains(.audio) {
             return audioConfig != nil
@@ -81,9 +86,7 @@ public class TSWriter: Running {
     }
 
     public func stopRunning() {
-        guard !isRunning.value else {
-            return
-        }
+        guard !isRunning.value else { return }
         audioContinuityCounter = 0
         videoContinuityCounter = 0
         PCRPID = TSWriter.defaultVideoPID
@@ -91,7 +94,8 @@ public class TSWriter: Running {
         PAT.programs = [1: TSWriter.defaultPMTPID]
         PMT = ProgramMapSpecific()
         audioConfig = nil
-        videoConfig = nil
+		h264Config = nil
+		h265Config = nil
         videoTimestamp = .invalid
         audioTimestamp = .invalid
         PCRTimestamp = .invalid
@@ -100,9 +104,7 @@ public class TSWriter: Running {
 
     // swiftlint:disable function_parameter_count
     final func writeSampleBuffer(_ PID: UInt16, streamID: UInt8, bytes: UnsafePointer<UInt8>?, count: UInt32, presentationTimeStamp: CMTime, decodeTimeStamp: CMTime, randomAccessIndicator: Bool) {
-        guard canWriteFor else {
-            return
-        }
+        guard canWriteFor else { return }
 
         switch PID {
         case TSWriter.defaultAudioPID:
@@ -127,7 +129,7 @@ public class TSWriter: Running {
             presentationTimeStamp: presentationTimeStamp,
             decodeTimeStamp: decodeTimeStamp,
             timestamp: PID == TSWriter.defaultVideoPID ? videoTimestamp : audioTimestamp,
-            config: streamID == 192 ? audioConfig : videoConfig,
+            config: streamID == 192 ? audioConfig : h264Config ?? h265Config,
             randomAccessIndicator: randomAccessIndicator) else {
             return
         }
@@ -184,12 +186,7 @@ public class TSWriter: Running {
     }
 
     final func writeProgramIfNeeded() {
-        guard !expectedMedias.isEmpty else {
-            return
-        }
-        guard canWriteFor else {
-            return
-        }
+        guard canWriteFor else { return }
         writeProgram()
     }
 
@@ -241,12 +238,13 @@ extension TSWriter: AudioConverterDelegate {
 extension TSWriter: VideoEncoderDelegate {
     // MARK: VideoEncoderDelegate
 	public func didSetFormatDescription(video formatDescription: CMFormatDescription?, codec: CMVideoCodecType) {
-        guard
-            let formatDescription: CMFormatDescription = formatDescription,
-            let avcC: Data = AVCConfigurationRecord.getData(formatDescription) else {
-            return
-        }
-        var data = ElementaryStreamSpecificData()
+		guard let formatDescription: CMFormatDescription = formatDescription else { return }
+		guard let codecC: Data = { () -> Data? in
+			if (codec == kCMVideoCodecType_H264) { return AVCConfigurationRecord.getData(formatDescription) }
+			if (codec == kCMVideoCodecType_HEVC) { return HEVCConfigurationRecord.getData(formatDescription) }
+			return nil
+		}() else { return }
+		var data = ElementaryStreamSpecificData()
 		var streamType = ElementaryStreamType.h264.rawValue
 		if codec == kCMVideoCodecType_H264 { streamType = ElementaryStreamType.h264.rawValue }
 		if codec == kCMVideoCodecType_HEVC { streamType = ElementaryStreamType.h265.rawValue }
@@ -254,7 +252,8 @@ extension TSWriter: VideoEncoderDelegate {
         data.elementaryPID = TSWriter.defaultVideoPID
         PMT.elementaryStreamSpecificData.append(data)
         videoContinuityCounter = 0
-        videoConfig = AVCConfigurationRecord(data: avcC)
+		if (codec == kCMVideoCodecType_H264) { h264Config = AVCConfigurationRecord(data: codecC) }
+		if (codec == kCMVideoCodecType_HEVC) { h265Config = HEVCConfigurationRecord(data: codecC) }
     }
 
     public func sampleOutput(video sampleBuffer: CMSampleBuffer) {

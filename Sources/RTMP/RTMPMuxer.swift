@@ -49,6 +49,7 @@ extension RTMPMuxer: VideoEncoderDelegate {
     // MARK: VideoEncoderDelegate
 	func didSetFormatDescription(video formatDescription: CMFormatDescription?, codec: CMVideoCodecType) {
         guard
+			codec == kCMVideoCodecType_H264,
             let formatDescription = formatDescription,
             let avcC = AVCConfigurationRecord.getData(formatDescription) else {
             return
