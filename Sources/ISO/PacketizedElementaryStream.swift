@@ -56,11 +56,11 @@ struct PESOptionalHeader {
             PTSDTSIndicator |= 0x01
         }
         if (PTSDTSIndicator & 0x02) == 0x02 {
-            let PTS = UInt64((presentationTimeStamp.seconds - base) * Double(TSTimestamp.resolution))
+            let PTS = UInt64(max(presentationTimeStamp.seconds - base, 0) * Double(TSTimestamp.resolution))
             optionalFields += TSTimestamp.encode(PTS, PTSDTSIndicator << 4)
         }
         if (PTSDTSIndicator & 0x01) == 0x01 {
-            let DTS = UInt64((decodeTimeStamp.seconds - base) * Double(TSTimestamp.resolution))
+            let DTS = UInt64(max(decodeTimeStamp.seconds - base, 0) * Double(TSTimestamp.resolution))
             optionalFields += TSTimestamp.encode(DTS, 0x01 << 4)
         }
         PESHeaderLength = UInt8(optionalFields.count)
