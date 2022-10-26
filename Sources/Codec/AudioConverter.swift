@@ -270,7 +270,7 @@ public class AudioConverter {
         }
 
         memcpy(ioData, currentAudioBuffer.input.unsafePointer, currentAudioBuffer.listSize)
-        ioNumberDataPackets.pointee = 1
+		ioNumberDataPackets.pointee = destination == .pcm ? 1 : UInt32(numSamples)
 
         if destination == .pcm && outDataPacketDescription != nil {
             audioStreamPacketDescription.mDataByteSize = currentAudioBuffer.input.unsafePointer.pointee.mBuffers.mDataByteSize
