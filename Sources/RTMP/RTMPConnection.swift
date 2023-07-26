@@ -172,7 +172,14 @@ open class RTMPConnection: EventDispatcher {
     open var requireNetworkFramework = false
     /// This instance uses an RTMPBlueSocket
     open var useBlueSocket = true
-	/// Max number of bytes  waiting to be sent acuumulated in one second needed trigger an 'insufficient bandwidth report'
+	/// Number of seconds of statistics to keep
+	/// Only works with BlueSocket.
+	open var statisticsWindow = 5 {
+		didSet {
+			(socket as? RTMPBlueSocket)?.statisticsWindow = statisticsWindow
+		}
+	}
+	/// Max number of bytes  waiting to be sent acuumulated in one second needed to trigger an 'insufficient bandwidth report'
 	/// That condition is: stats.queued.total - stats.sent.total > maxPendingByteCount
 	/// Only works with BlueSocket.
 	open var maxPendingByteCount = 10000
@@ -299,6 +306,7 @@ open class RTMPConnection: EventDispatcher {
         default:
 			if useBlueSocket {
 				socket = socket is RTMPBlueSocket ? socket : RTMPBlueSocket()
+				(socket as? RTMPBlueSocket)?.statisticsWindow = statisticsWindow
 			} else if #available(iOS 12.0, macOS 10.14, tvOS 12.0, *), requireNetworkFramework {
                 socket = socket is RTMPNWSocket ? socket : RTMPNWSocket()
             } else {
