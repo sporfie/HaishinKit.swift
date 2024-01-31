@@ -19,6 +19,7 @@ public final class H26XEncoder {
         case height
         case bitrate
         case profileLevel
+		case fps
         #if os(macOS)
         case enabledHardwareEncoder
         #endif
@@ -43,8 +44,10 @@ public final class H26XEncoder {
                 return \H26XEncoder.maxKeyFrameIntervalDuration
             case .scalingMode:
                 return \H26XEncoder.scalingMode
-            case .profileLevel:
-                return \H26XEncoder.profileLevel
+			case .profileLevel:
+				return \H26XEncoder.profileLevel
+			case .fps:
+				return \H26XEncoder.expectedFPS
             }
         }
     }
