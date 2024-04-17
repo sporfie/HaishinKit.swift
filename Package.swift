@@ -13,7 +13,7 @@ let package = Package(
         .library(name: "HaishinKit", type: .dynamic, targets: ["HaishinKit"])
     ],
     dependencies: [
-        .package(url: "https://github.com/shogo4405/Logboard.git", from: "2.3.1"),
+		.package(url: "https://github.com/shogo4405/Logboard.git", "2.4.1"..."2.4.1"),
 		.package(url: "https://github.com/Kitura/BlueSocket.git", from: "1.0.200"),
     ],
     targets: [
