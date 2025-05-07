@@ -1,5 +1,10 @@
 import AVFoundation
 
+public protocol EncodedStreamDelegate: AnyObject {
+	func processEncodedAudio(audio data: UnsafeMutableAudioBufferListPointer, presentationTimeStamp: CMTime) -> UnsafeMutableAudioBufferListPointer
+	func processEncodedFrame(_ buffer: CMSampleBuffer) -> CMSampleBuffer
+}
+
 /**
  flash.net.NetStream for Swift
  */
@@ -188,6 +193,7 @@ open class RTMPStream: NetStream {
     public static let defaultAudioBitrate: UInt32 = AudioConverter.defaultBitrate
     public static let defaultVideoBitrate: UInt32 = H26XEncoder.defaultBitrate
 
+	open weak var encodedStreamDelegate : EncodedStreamDelegate?
     open weak var delegate: RTMPStreamDelegate?
     open internal(set) var info = RTMPStreamInfo()
     open private(set) var objectEncoding: RTMPObjectEncoding = RTMPConnection.defaultObjectEncoding
@@ -287,8 +293,8 @@ open class RTMPStream: NetStream {
                 #if os(iOS)
                     mixer.videoIO.screen?.startRunning()
                 #endif
-                mixer.audioIO.encoder.delegate = muxer
-                mixer.videoIO.encoder.delegate = muxer
+                mixer.audioIO.encoder.delegate = self
+                mixer.videoIO.encoder.delegate = self
                 sampler?.delegate = muxer
                 mixer.startRunning()
                 videoWasSent = false
@@ -637,4 +643,27 @@ extension RTMPStream: AVMixerDelegate {
     func didOutputAudio(_ buffer: AVAudioPCMBuffer, presentationTimeStamp: CMTime) {
         delegate?.rtmpStream(self, didOutput: buffer, presentationTimeStamp: presentationTimeStamp)
     }
+}
+
+extension RTMPStream: AudioConverterDelegate {
+	public func didSetFormatDescription(audio formatDescription: CMFormatDescription?) {
+		muxer.didSetFormatDescription(audio: formatDescription)
+	}
+	
+	public func sampleOutput(audio data: UnsafeMutableAudioBufferListPointer, presentationTimeStamp: CMTime) {
+		let newData = encodedStreamDelegate?.processEncodedAudio(audio: data, presentationTimeStamp: presentationTimeStamp) ?? data
+		muxer.sampleOutput(audio: newData, presentationTimeStamp: presentationTimeStamp)
+	}
+}
+
+extension RTMPStream: VideoEncoderDelegate {
+	// MARK: VideoEncoderDelegate
+	public func didSetFormatDescription(video formatDescription: CMFormatDescription?, codec: CMVideoCodecType) {
+		muxer.didSetFormatDescription(video: formatDescription, codec: codec)
+	}
+
+	public func sampleOutput(video sampleBuffer: CMSampleBuffer) {
+		let sample = encodedStreamDelegate?.processEncodedFrame(sampleBuffer) ?? sampleBuffer
+		muxer.sampleOutput(video: sample)
+	}
 }
