@@ -154,7 +154,7 @@ public class TSWriter: Running {
             default:
                 break
             }
-            bytes.append(packet.data)
+            bytes.append(Data(packet.data))
         }
 
         write(bytes)
