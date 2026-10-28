@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import AVFoundation
+import VideoToolbox
 
 @testable import HaishinKit
 
@@ -26,6 +27,12 @@ final class SettingTests: XCTestCase {
 
         encoder.settings[.maxKeyFrameIntervalDuration] = Float(5.0)
         XCTAssertEqual(5.0, encoder.maxKeyFrameIntervalDuration)
+
+        XCTAssertEqual(encoder.settings[.allowFrameReordering] as? Bool, encoder.allowFrameReordering)
+        encoder.settings[.allowFrameReordering] = false
+        XCTAssertEqual(false, encoder.allowFrameReordering)
+        encoder.settings[.profileLevel] = kVTProfileLevel_H264_Main_AutoLevel as String
+        XCTAssertEqual(false, encoder.allowFrameReordering)
     }
 
     func testAVMixer() {

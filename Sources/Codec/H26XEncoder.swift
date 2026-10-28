@@ -24,6 +24,7 @@ public final class H26XEncoder {
         case enabledHardwareEncoder
         #endif
         case maxKeyFrameIntervalDuration
+        case allowFrameReordering
         case scalingMode
 
         public var keyPath: AnyKeyPath {
@@ -42,6 +43,8 @@ public final class H26XEncoder {
             #endif
             case .maxKeyFrameIntervalDuration:
                 return \H26XEncoder.maxKeyFrameIntervalDuration
+            case .allowFrameReordering:
+                return \H26XEncoder.allowFrameReordering
             case .scalingMode:
                 return \H26XEncoder.scalingMode
 			case .profileLevel:
@@ -143,6 +146,18 @@ public final class H26XEncoder {
             invalidateSession = true
         }
     }
+    // nil keeps the historical rule: reordering is off only when the profile name contains "Baseline".
+    private var allowFrameReorderingOverride: Bool?
+    var allowFrameReordering: Bool {
+        get {
+            allowFrameReorderingOverride ?? !profileLevel.contains("Baseline")
+        }
+        set {
+            guard allowFrameReorderingOverride != newValue else { return }
+            allowFrameReorderingOverride = newValue
+            invalidateSession = true
+        }
+    }
     var locked: UInt32 = 0
     var lockQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.H26XEncoder.lock")
     var expectedFPS: Float64 = AVMixer.defaultFPS {
@@ -178,7 +193,7 @@ public final class H26XEncoder {
             kVTCompressionPropertyKey_AverageBitRate: Int(bitrate) as NSObject,
             kVTCompressionPropertyKey_ExpectedFrameRate: NSNumber(value: expectedFPS),
             kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration: NSNumber(value: maxKeyFrameIntervalDuration),
-            kVTCompressionPropertyKey_AllowFrameReordering: !isBaseline as NSObject,
+            kVTCompressionPropertyKey_AllowFrameReordering: allowFrameReordering as NSObject,
             kVTCompressionPropertyKey_PixelTransferProperties: [
                 "ScalingMode": scalingMode.rawValue
             ] as NSObject
